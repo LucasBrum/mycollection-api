@@ -20,9 +20,9 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<Response<CategoriaDTO>> criar(@RequestBody CategoriaDTO categoriaDTO) {
-        categoriaDTO = this.categoriaService.criar(categoriaDTO);
+            CategoriaDTO categoriaCriada = this.categoriaService.criar(categoriaDTO);
         Response<CategoriaDTO> response = new Response<>();
-        response.setData(categoriaDTO);
+        response.setData(categoriaCriada);
         response.setStatusCode(HttpStatus.CREATED.value());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -52,10 +52,10 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Response<CategoriaDTO>> atualizar(@PathVariable Long id, @RequestBody CategoriaDTO categoriaDTO) {
-        categoriaDTO = categoriaService.atualizar(id, categoriaDTO);
+        CategoriaDTO categoriaAtualizada = categoriaService.atualizar(id, categoriaDTO);
 
         Response<CategoriaDTO> response = new Response<>();
-        response.setData(categoriaDTO);
+        response.setData(categoriaAtualizada);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

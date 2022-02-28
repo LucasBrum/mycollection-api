@@ -32,8 +32,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     public CategoriaDTO criar(CategoriaDTO categoriaDTO) {
         try {
             Categoria categoria  = this.mapper.map(categoriaDTO, Categoria.class);
-
             this.categoriaRepository.save(categoria);
+            categoriaDTO = mapper.map(categoria, CategoriaDTO.class);
 
             return categoriaDTO;
         } catch (Exception e) {
@@ -43,11 +43,16 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     public CategoriaDTO atualizar(Long id, CategoriaDTO categoriaDTO) {
+        CategoriaDTO categoriaDTOEncontrada = this.buscarPeloId(id);
+        if (categoriaDTOEncontrada == null) {
+            throw new CategoriaException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
+        }
         try {
-            this.buscarPeloId(id);
+
+            categoriaDTO.setId(id);
             Categoria categoria = mapper.map(categoriaDTO, Categoria.class);
             this.categoriaRepository.save(categoria);
-
+            categoriaDTO = mapper.map(categoria, CategoriaDTO.class);
             return categoriaDTO;
         } catch (Exception e) {
             throw new CategoriaException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -67,6 +72,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         } catch (Exception e) {
             throw new CategoriaException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
         return null;
     }
 
@@ -83,7 +89,10 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public void delete(Long id) {
         try {
-            this.buscarPeloId(id);
+            CategoriaDTO categoriaDTOEncontrada = this.buscarPeloId(id);
+            if (categoriaDTOEncontrada == null) {
+                throw new CategoriaException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
+            }
             this.categoriaRepository.deleteById(id);
         } catch (CategoriaException ce) {
             throw ce;
