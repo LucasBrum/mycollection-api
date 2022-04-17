@@ -12,8 +12,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoriaServiceTest {
@@ -39,6 +44,7 @@ public class CategoriaServiceTest {
                 .id(1L)
                 .nome("Cd")
                 .build();
+
     }
 
     @Test
@@ -50,6 +56,19 @@ public class CategoriaServiceTest {
 
         assertThat(savedCategoria).isNotNull();
 
+    }
+
+    @Test
+    @DisplayName("JUnit test for delete Category method")
+    public void givenCategoryId_whenDeleteCategory_thenNothing() {
+        Long categoryId = 1L;
+
+        given(categoriaRepository.findById(categoryId)).willReturn(Optional.of(categoria));
+        willDoNothing().given(categoriaRepository).deleteById(categoryId);
+
+        categoriaService.delete(categoryId);
+
+        verify(categoriaRepository, times(1)).deleteById(categoryId);
     }
 
 }
