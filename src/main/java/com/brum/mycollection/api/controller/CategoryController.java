@@ -18,29 +18,29 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Response<CategoryDTO>> criar(@RequestBody CategoryDTO categoryDTO) {
-            CategoryDTO categoriaCriada = this.categoryService.criar(categoryDTO);
+    public ResponseEntity<Response<CategoryDTO>> create(@RequestBody CategoryDTO categoryDTO) {
+            CategoryDTO categoryCreated = this.categoryService.create(categoryDTO);
         Response<CategoryDTO> response = new Response<>();
-        response.setData(categoriaCriada);
+        response.setData(categoryCreated);
         response.setStatusCode(HttpStatus.CREATED.value());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<CategoryDTO>>> listar() {
-        List<CategoryDTO> categoriasDTO = this.categoryService.listar();
+    public ResponseEntity<Response<List<CategoryDTO>>> list() {
+        List<CategoryDTO> categoryDTOList = this.categoryService.list();
 
         Response<List<CategoryDTO>> response = new Response<>();
-        response.setData(categoriasDTO);
+        response.setData(categoryDTOList);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<CategoryDTO>> buscarPeloId(@PathVariable Long id) {
-        CategoryDTO categoryDTO = this.categoryService.buscarPeloId(id);
+    public ResponseEntity<Response<CategoryDTO>> findById(@PathVariable Long id) {
+        CategoryDTO categoryDTO = this.categoryService.findById(id);
 
         Response<CategoryDTO> response = new Response<>();
         response.setData(categoryDTO);
@@ -50,11 +50,11 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<CategoryDTO>> atualizar(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO categoriaAtualizada = categoryService.atualizar(id, categoryDTO);
+    public ResponseEntity<Response<CategoryDTO>> update(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO categoryUpdated = categoryService.update(id, categoryDTO);
 
         Response<CategoryDTO> response = new Response<>();
-        response.setData(categoriaAtualizada);
+        response.setData(categoryUpdated);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

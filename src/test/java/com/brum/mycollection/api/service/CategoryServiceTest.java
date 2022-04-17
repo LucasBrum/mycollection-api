@@ -52,7 +52,7 @@ public class CategoryServiceTest {
     public void givenCategoryObject_whenSaveCategory_thenReturnCategoryObject() {
         given(categoryRepository.save(category)).willReturn(category);
 
-        CategoryDTO savedCategoria = categoriaService.criar(categoryDTO);
+        CategoryDTO savedCategoria = categoriaService.create(categoryDTO);
 
         assertThat(savedCategoria).isNotNull();
 

@@ -28,7 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO criar(CategoryDTO categoryDTO) {
+    public CategoryDTO create(CategoryDTO categoryDTO) {
         try {
             Category category = this.mapper.map(categoryDTO, Category.class);
             this.categoryRepository.save(category);
@@ -41,8 +41,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO atualizar(Long id, CategoryDTO categoryDTO) {
-        CategoryDTO categoryDTOEncontrada = this.buscarPeloId(id);
+    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
+        CategoryDTO categoryDTOEncontrada = this.findById(id);
         if (categoryDTOEncontrada == null) {
             throw new CategoryException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
         }
@@ -59,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO buscarPeloId(Long id) {
+    public CategoryDTO findById(Long id) {
         try {
             Optional<Category> categoriaOptional = this.categoryRepository.findById(id);
             if (categoriaOptional.isPresent()) {
@@ -76,7 +76,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> listar() {
+    public List<CategoryDTO> list() {
         try {
             List<Category> categories = this.categoryRepository.findAll();
             return this.mapper.map(categories, new TypeToken<List<CategoryDTO>>() {}.getType());
@@ -88,8 +88,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
         try {
-            CategoryDTO categoryDTOEncontrada = this.buscarPeloId(id);
-            if (categoryDTOEncontrada == null) {
+            CategoryDTO categoryDTOFound = this.findById(id);
+            if (categoryDTOFound == null) {
                 throw new CategoryException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
             }
             this.categoryRepository.deleteById(id);
