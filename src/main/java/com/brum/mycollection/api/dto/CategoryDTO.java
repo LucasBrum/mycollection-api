@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoriaDTO {
+public class CategoryDTO {
 
     private Long id;
 

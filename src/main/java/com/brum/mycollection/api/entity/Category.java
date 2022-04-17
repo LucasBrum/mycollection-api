@@ -20,7 +20,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Categoria implements Serializable {
+public class Category implements Serializable {
 
     private static final long serialVersionUID = -5115709874529054925L;
 
