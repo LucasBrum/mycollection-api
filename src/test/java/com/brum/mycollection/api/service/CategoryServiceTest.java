@@ -37,12 +37,12 @@ public class CategoryServiceTest {
 
         category = Category.builder()
                 .id(1L)
-                .nome("Cd")
+                .name("Cd")
                 .build();
 
         categoryDTO = CategoryDTO.builder()
                 .id(1L)
-                .nome("Cd")
+                .name("Cd")
                 .build();
 
     }
