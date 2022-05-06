@@ -66,8 +66,7 @@ public class CategoryServiceImpl implements CategoryService {
                 CategoryDTO categoryDTO = mapper.map(categoriaOptional.get(), CategoryDTO.class);
                 return categoryDTO;
             }
-        } catch (CategoryException ce) {
-            throw ce;
+
         } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
