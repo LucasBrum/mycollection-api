@@ -31,6 +31,6 @@ public class Category implements Serializable {
     private Long id;
 
     @JsonInclude(Include.NON_EMPTY)
-    private String nome;
+    private String name;
 
 }

@@ -16,5 +16,5 @@ public class CategoryDTO {
     private Long id;
 
     @NotBlank(message = "Informe a descrição da Categoria")
-    private String nome;
+    private String name;
 }

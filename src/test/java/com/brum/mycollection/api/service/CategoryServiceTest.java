@@ -17,8 +17,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
@@ -37,19 +36,19 @@ public class CategoryServiceTest {
 
         category = Category.builder()
                 .id(1L)
-                .nome("Cd")
+                .name("CD")
                 .build();
 
         categoryDTO = CategoryDTO.builder()
                 .id(1L)
-                .nome("Cd")
+                .name("CD")
                 .build();
 
     }
 
     @Test
-    @DisplayName("Junit Test for create Category method")
-    public void givenCategoryObject_whenSaveCategory_thenReturnCategoryObject() {
+    @DisplayName("Test for Create Category")
+    public void testCreateCategory() {
         given(categoryRepository.save(category)).willReturn(category);
 
         CategoryDTO savedCategoria = categoriaService.create(categoryDTO);
@@ -59,16 +58,36 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("JUnit test for delete Category method")
-    public void givenCategoryId_whenDeleteCategory_thenNothing() {
+    @DisplayName("Test for Delete Category")
+    public void testDeleteCategory() {
         Long categoryId = 1L;
 
+        // given
         given(categoryRepository.findById(categoryId)).willReturn(Optional.of(category));
+
+        // when
         willDoNothing().given(categoryRepository).deleteById(categoryId);
 
+        //then
         categoriaService.delete(categoryId);
 
         verify(categoryRepository, times(1)).deleteById(categoryId);
+    }
+
+    @Test
+    public void testUpdateCategory() {
+        Long categoryId = 1L;
+
+        // given
+        given(categoryRepository.findById(categoryId)).willReturn(Optional.of(category));
+        lenient().when(categoryRepository.save(category)).thenReturn(category);
+        categoryDTO.setName("CD Alterado");
+
+        // when
+        CategoryDTO updatedCategory = categoriaService.update(categoryId, categoryDTO);
+
+        // then
+        assertThat(updatedCategory.getName()).isEqualTo("CD Alterado");
     }
 
 }
