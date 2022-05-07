@@ -31,6 +31,11 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDTO create(CategoryDTO categoryDTO) {
         try {
             Category category = this.mapper.map(categoryDTO, Category.class);
+
+            if (categoryRepository.existsByName(categoryDTO.getName())) {
+                throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
+            }
+
             this.categoryRepository.save(category);
             categoryDTO = mapper.map(category, CategoryDTO.class);
 
@@ -77,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDTO> list() {
         try {
-            List<Category> categories = this.categoryRepository.findAll();
+            List<Category> categories = this.categoryRepository.findAllByOrderByNameAsc();
             return this.mapper.map(categories, new TypeToken<List<CategoryDTO>>() {}.getType());
         } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
