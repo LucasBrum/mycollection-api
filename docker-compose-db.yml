@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  myCollectionDB:
+    image: 'postgres:latest'
+    ports:
+    - "5433:5432"
+    container_name: db-mycollection
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mycollection_db
+
+        
