@@ -7,10 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
@@ -19,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cd implements Serializable {
+public class Artist implements Serializable {
 
     private static final long serialVersionUID = -5115707874529054925L;
 
@@ -29,7 +26,7 @@ public class Cd implements Serializable {
     @GenericGenerator(name = "increment", strategy = "increment")
     private Long id;
 
-    private String artist;
+    private String band;
 
     private String title;
 
@@ -38,5 +35,9 @@ public class Cd implements Serializable {
     private String country;
 
     private String genre;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
 }
