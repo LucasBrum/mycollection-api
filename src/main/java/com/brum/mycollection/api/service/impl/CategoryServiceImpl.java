@@ -32,7 +32,8 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Category category = this.mapper.map(categoryDTO, Category.class);
 
-            if (categoryRepository.existsByName(categoryDTO.getName())) {
+            Boolean categoryExistsByName = categoryRepository.existsByName(categoryDTO.getName());
+            if (categoryExistsByName) {
                 throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
             }
 
@@ -92,14 +93,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
         try {
-            CategoryDTO categoryDTOFound = this.findById(id);
-            if (categoryDTOFound == null) {
-                throw new CategoryException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
-            }
+            this.findById(id);
+
             this.categoryRepository.deleteById(id);
         } catch (CategoryException ce) {
-            throw ce;
-        } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
