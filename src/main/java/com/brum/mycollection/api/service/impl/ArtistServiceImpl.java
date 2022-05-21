@@ -64,18 +64,20 @@ public class ArtistServiceImpl implements ArtistService {
                 return artistDTO;
             }
 
+            throw new ArtistException("Artista não encontrado.", HttpStatus.NOT_FOUND);
+        } catch (ArtistException aex) {
+            throw aex;
         } catch (Exception e) {
             throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return null;
     }
 
     @Override
     public List<ArtistDTO> list() {
         try {
             List<Artist> artists = this.artistRepository.findAllByOrderByBandAsc();
-            return this.mapper.map(artists, new TypeToken<List<ArtistDTO>>() {}.getType());
+            return this.mapper.map(artists, new TypeToken<List<ArtistDTO>>() {
+            }.getType());
         } catch (Exception e) {
             throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

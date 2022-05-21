@@ -126,24 +126,6 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Test for update category not found wich throws exception")
-    public void testUpdateCategoryNotFoundThrowException() {
-        given(categoryRepository.findById(anyLong())).willReturn(Optional.empty());
-        lenient().when(categoryRepository.save(category)).thenReturn(category);
-        categoryDTO.setName("CD Alterado");
-
-        CategoryException categoryException;
-
-        categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.update(anyLong(), categoryDTO);
-        });
-
-        assertEquals(HttpStatus.NO_CONTENT, categoryException.getHttpStatus());
-        verify(this.categoryRepository, times(0)).save(category);
-
-    }
-
-    @Test
     @DisplayName("Test for update category wich throws exception")
     public void testUpdateCategoryThrowException() {
         given(categoryRepository.findById(anyLong())).willReturn(Optional.of(category));
@@ -209,22 +191,6 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Test find Category by Id Returning Null")
-    public void testFindCategoryByIdReturningNull() {
-        Long categoryId = 1L;
-
-        List<Category> categoryList = new ArrayList<>();
-
-
-        given(categoryRepository.findById(categoryId)).willReturn(Optional.empty());
-
-        CategoryDTO categoryDTO = categoriaService.findById(categoryId);
-
-        assertThat(categoryDTO).isNull();
-
-    }
-
-    @Test
     @DisplayName("Test find category by id throw exception")
     public void testFindCategoryByIdAllThrowException() {
         Long categoryId = 1L;
@@ -237,6 +203,22 @@ public class CategoryServiceTest {
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
+        verify(this.categoryRepository, times(1)).findById(categoryId);
+    }
+
+    @Test
+    @DisplayName("Test find category by id throw Category Exception")
+    public void testFindCategoryByIdAllThrowCategoryException() {
+        Long categoryId = 1L;
+        when(this.categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
+
+        CategoryException categoryException;
+
+        categoryException = assertThrows(CategoryException.class, () -> {
+            this.categoriaService.findById(categoryId);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, categoryException.getHttpStatus());
         verify(this.categoryRepository, times(1)).findById(categoryId);
     }
 

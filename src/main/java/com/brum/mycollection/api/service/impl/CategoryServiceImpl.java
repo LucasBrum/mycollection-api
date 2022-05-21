@@ -16,9 +16,7 @@ import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-
     private final CategoryRepository categoryRepository;
-
     private final ModelMapper mapper;
 
     @Autowired
@@ -49,9 +47,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
         CategoryDTO categoryDTOEncontrada = this.findById(id);
-        if (categoryDTOEncontrada == null) {
-            throw new CategoryException("Categoria não encontrada.", HttpStatus.NO_CONTENT);
-        }
         try {
 
             categoryDTO.setId(id);
@@ -73,11 +68,13 @@ public class CategoryServiceImpl implements CategoryService {
                 return categoryDTO;
             }
 
+            throw new CategoryException("Categoria não encontrada.", HttpStatus.NOT_FOUND);
+
+        } catch (CategoryException cex) {
+            throw cex;
         } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        return null;
     }
 
     @Override
