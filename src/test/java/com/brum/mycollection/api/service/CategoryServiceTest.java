@@ -65,9 +65,9 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Test for create category wich throw exception")
-    public void testCreateCategoryAllThrowException() {
-        given(this.categoryRepository.existsByName(anyString())).willReturn(Boolean.TRUE);
+    @DisplayName("Test for create category Internal Server Erro wich throw exception")
+    public void testCreateCategoryError500ThrowException() {
+        given(this.categoryRepository.existsByName(anyString())).willReturn(null);
 
         CategoryException categoryException;
 
@@ -77,6 +77,37 @@ public class CategoryServiceTest {
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
         verify(this.categoryRepository, times(1)).existsByName(anyString());
+
+    }
+
+    @Test
+    @DisplayName("Test for create category already exists wich throw exception")
+    public void testCreateCategoryAllThrowException() {
+        given(this.categoryRepository.existsByName(anyString())).willReturn(Boolean.TRUE);
+
+        CategoryException categoryException;
+
+        categoryException = assertThrows(CategoryException.class, () -> {
+            this.categoriaService.create(categoryDTO);
+        });
+
+        assertEquals(HttpStatus.CONFLICT, categoryException.getHttpStatus());
+        verify(this.categoryRepository, times(1)).existsByName(anyString());
+
+    }
+
+    @Test
+    @DisplayName("Test for create category when name is null wich throw exception")
+    public void testCreateCategoryWithoutNameThrowException() {
+        categoryDTO.setName(null);
+
+        CategoryException categoryException;
+
+        categoryException = assertThrows(CategoryException.class, () -> {
+            this.categoriaService.create(categoryDTO);
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, categoryException.getHttpStatus());
 
     }
 

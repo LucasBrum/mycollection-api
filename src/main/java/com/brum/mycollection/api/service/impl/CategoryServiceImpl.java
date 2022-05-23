@@ -30,17 +30,30 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Category category = this.mapper.map(categoryDTO, Category.class);
 
-            Boolean categoryExistsByName = categoryRepository.existsByName(categoryDTO.getName());
-            if (categoryExistsByName) {
-                throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
-            }
+            validateCategoryName(categoryDTO);
+            verifyCategoryName(categoryDTO);
 
             this.categoryRepository.save(category);
             categoryDTO = mapper.map(category, CategoryDTO.class);
 
             return categoryDTO;
+        } catch (CategoryException cex) {
+            throw cex;
         } catch (Exception e) {
             throw new CategoryException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private void verifyCategoryName(CategoryDTO categoryDTO) {
+        Boolean categoryExistsByName = categoryRepository.existsByName(categoryDTO.getName());
+        if (categoryExistsByName) {
+            throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
+        }
+    }
+
+    private void validateCategoryName(CategoryDTO categoryDTO) {
+        if (categoryDTO.getName() == null || categoryDTO.getName().equals("")) {
+            throw new CategoryException("O nome da categoria deve ser preenchida.", HttpStatus.BAD_REQUEST);
         }
     }
 
