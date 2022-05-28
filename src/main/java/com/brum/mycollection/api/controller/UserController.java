@@ -30,7 +30,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Response<UserDTO>> create(@RequestBody UserDTO userDTO) {
-
+        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
         UserDTO userCreated = this.userService.create(userDTO);
         Response<UserDTO> response = new Response<>();
         response.setData(userCreated);

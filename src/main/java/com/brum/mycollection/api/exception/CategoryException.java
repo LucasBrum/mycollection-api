@@ -15,5 +15,4 @@ public class CategoryException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
-
 }
