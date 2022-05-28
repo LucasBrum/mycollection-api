@@ -6,6 +6,7 @@ import com.brum.mycollection.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +25,15 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     @PostMapping
-    public ResponseEntity<Response<UserDTO>> create(@RequestBody UserDTO artistDTO) {
-        UserDTO artistCreated = this.userService.create(artistDTO);
+    public ResponseEntity<Response<UserDTO>> create(@RequestBody UserDTO userDTO) {
+
+        UserDTO userCreated = this.userService.create(userDTO);
         Response<UserDTO> response = new Response<>();
-        response.setData(artistCreated);
+        response.setData(userCreated);
         response.setStatusCode(HttpStatus.CREATED.value());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -36,10 +41,10 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Response<List<UserDTO>>> list() {
-        List<UserDTO> artistDTOList = this.userService.list();
+        List<UserDTO> userDTOList = this.userService.list();
 
         Response<List<UserDTO>> response = new Response<>();
-        response.setData(artistDTOList);
+        response.setData(userDTOList);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -47,21 +52,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Response<UserDTO>> findById(@PathVariable Long id) {
-        UserDTO artistDTO = this.userService.findById(id);
+        UserDTO userDTO = this.userService.findById(id);
 
         Response<UserDTO> response = new Response<>();
-        response.setData(artistDTO);
+        response.setData(userDTO);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<UserDTO>> update(@PathVariable Long id, @RequestBody UserDTO artistDTO) {
-        UserDTO artistUpdated = this.userService.update(id, artistDTO);
+    public ResponseEntity<Response<UserDTO>> update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+        UserDTO userDTOUpdated = this.userService.update(id, userDTO);
 
         Response<UserDTO> response = new Response<>();
-        response.setData(artistUpdated);
+        response.setData(userDTOUpdated);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
