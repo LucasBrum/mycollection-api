@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -81,5 +82,24 @@ public class UserController {
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("validate-password")
+    public ResponseEntity<Response<Boolean>> validatePassword(@RequestParam String username, @RequestParam String password) {
+        UserDTO user = userService.findByUsername(username);
+        Response<Boolean> response = new Response<>();
+        if (user == null) {
+            response.setData(false);
+            response.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+        }
+
+        boolean valid = encoder.matches(password, user.getPassword());
+        HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
+
+        response.setData(valid);
+        response.setStatusCode(status.value());
+
+        return new ResponseEntity<>(response, status);
     }
 }

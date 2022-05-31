@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +21,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.mapper = new ModelMapper();
+        this.encoder = encoder;
     }
 
     @Override
@@ -67,6 +71,24 @@ public class UserServiceImpl implements UserService {
             }
 
             throw new UserException("Usuário não encontrado.", HttpStatus.NOT_FOUND);
+
+        } catch (UserException cex) {
+            throw cex;
+        } catch (Exception e) {
+            throw new UserException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public UserDTO findByUsername(String username) {
+        try{
+            Optional<User> userOptional = this.userRepository.findByUsername(username);
+            if(userOptional.isPresent()) {
+                UserDTO userDTO = mapper.map(userOptional.get(), UserDTO.class);
+
+                return userDTO;
+            }
+            throw new UserException("Usuário com o username não encontrado.", HttpStatus.NOT_FOUND);
 
         } catch (UserException cex) {
             throw cex;
