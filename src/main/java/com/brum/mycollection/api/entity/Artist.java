@@ -36,8 +36,8 @@ public class Artist implements Serializable {
 
     private String genre;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
     private Category category;
 
 }

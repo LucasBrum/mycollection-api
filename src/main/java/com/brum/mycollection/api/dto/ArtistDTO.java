@@ -1,5 +1,6 @@
 package com.brum.mycollection.api.dto;
 
+import com.brum.mycollection.api.entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,4 +30,7 @@ public class ArtistDTO {
 
     @NotBlank(message = "Informe o Gênero")
     private String genre;
+
+    @NotBlank(message = "Informe a Categoria")
+    private Category category;
 }
