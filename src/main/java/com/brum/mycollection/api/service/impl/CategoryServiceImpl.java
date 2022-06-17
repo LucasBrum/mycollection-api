@@ -62,9 +62,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDTO findById(Long id) {
         try {
-            Optional<Category> categoriaOptional = this.categoryRepository.findById(id);
-            if (categoriaOptional.isPresent()) {
-                CategoryDTO categoryDTO = mapper.map(categoriaOptional.get(), CategoryDTO.class);
+            Optional<Category> category = this.categoryRepository.findById(id);
+            if (category.isPresent()) {
+                CategoryDTO categoryDTO = mapper.map(category.get(), CategoryDTO.class);
                 return categoryDTO;
             }
 

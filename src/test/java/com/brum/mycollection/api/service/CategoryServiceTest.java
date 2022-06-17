@@ -33,7 +33,7 @@ public class CategoryServiceTest {
     private CategoryRepository categoryRepository;
 
     @InjectMocks
-    private CategoryServiceImpl categoriaService;
+    private CategoryServiceImpl categoryService;
 
     private Category category;
     private CategoryDTO categoryDTO;
@@ -58,9 +58,9 @@ public class CategoryServiceTest {
     public void testCreateCategory() {
         given(categoryRepository.save(category)).willReturn(category);
 
-        CategoryDTO savedCategoria = categoriaService.create(categoryDTO);
+        CategoryDTO savedCategory = categoryService.create(categoryDTO);
 
-        assertThat(savedCategoria).isNotNull();
+        assertThat(savedCategory).isNotNull();
 
     }
 
@@ -72,14 +72,13 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.create(categoryDTO);
+            this.categoryService.create(categoryDTO);
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
         verify(this.categoryRepository, times(1)).existsByName(anyString());
 
     }
-
     @Test
     @DisplayName("Test for create category already exists wich throw exception")
     public void testCreateCategoryAllThrowException() {
@@ -88,7 +87,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.create(categoryDTO);
+            this.categoryService.create(categoryDTO);
         });
 
         assertEquals(HttpStatus.CONFLICT, categoryException.getHttpStatus());
@@ -104,7 +103,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.create(categoryDTO);
+            this.categoryService.create(categoryDTO);
         });
 
         assertEquals(HttpStatus.BAD_REQUEST, categoryException.getHttpStatus());
@@ -120,7 +119,7 @@ public class CategoryServiceTest {
 
         willDoNothing().given(categoryRepository).deleteById(categoryId);
 
-        categoriaService.delete(categoryId);
+        categoryService.delete(categoryId);
 
         verify(categoryRepository, times(1)).deleteById(categoryId);
     }
@@ -133,7 +132,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.delete(anyLong());
+            this.categoryService.delete(anyLong());
         });
 
 
@@ -151,7 +150,7 @@ public class CategoryServiceTest {
         lenient().when(categoryRepository.save(category)).thenReturn(category);
         categoryDTO.setName("CD Alterado");
 
-        CategoryDTO updatedCategory = categoriaService.update(categoryId, categoryDTO);
+        CategoryDTO updatedCategory = categoryService.update(categoryId, categoryDTO);
 
         assertThat(updatedCategory.getName()).isEqualTo("CD Alterado");
     }
@@ -165,7 +164,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.update(anyLong(), null);
+            this.categoryService.update(anyLong(), null);
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
@@ -183,7 +182,7 @@ public class CategoryServiceTest {
 
         given(categoryRepository.findAllByOrderByNameAsc()).willReturn(categoryList);
 
-        List<CategoryDTO> categoryDTOList = categoriaService.list();
+        List<CategoryDTO> categoryDTOList = categoryService.list();
 
         assertThat(categoryDTOList.size()).isEqualTo(1);
 
@@ -197,7 +196,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.list();
+            this.categoryService.list();
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
@@ -215,7 +214,7 @@ public class CategoryServiceTest {
 
         given(categoryRepository.findById(categoryId)).willReturn(Optional.of(category));
 
-        CategoryDTO categoryDTO = categoriaService.findById(categoryId);
+        CategoryDTO categoryDTO = categoryService.findById(categoryId);
 
         assertThat(categoryDTO).isNotNull();
 
@@ -230,7 +229,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.findById(categoryId);
+            this.categoryService.findById(categoryId);
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, categoryException.getHttpStatus());
@@ -246,7 +245,7 @@ public class CategoryServiceTest {
         CategoryException categoryException;
 
         categoryException = assertThrows(CategoryException.class, () -> {
-            this.categoriaService.findById(categoryId);
+            this.categoryService.findById(categoryId);
         });
 
         assertEquals(HttpStatus.NOT_FOUND, categoryException.getHttpStatus());
