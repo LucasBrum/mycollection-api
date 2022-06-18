@@ -4,7 +4,6 @@ import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.ArtistException;
-import com.brum.mycollection.api.exception.CategoryException;
 import com.brum.mycollection.api.repository.ArtistRepository;
 import com.brum.mycollection.api.service.impl.ArtistServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,17 +15,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ArtistServiceTest {
@@ -118,9 +117,119 @@ public class ArtistServiceTest {
             this.artistService.delete(anyLong());
         });
 
-
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, artistException.getHttpStatus());
         verify(this.artistRepository, times(0)).deleteById(anyLong());
+
+    }
+
+    @Test
+    @DisplayName("Test for update album")
+    public void testUpdateArtist() {
+        Long artistId = 1L;
+
+        given(artistRepository.findById(artistId)).willReturn(Optional.of(artist));
+        lenient().when(artistRepository.save(artist)).thenReturn(artist);
+        artistDTO.setBand("Angra alterado");
+
+        ArtistDTO updatedArtist = artistService.update(artistId, artistDTO);
+
+        assertThat(updatedArtist.getBand()).isEqualTo("Angra alterado");
+    }
+
+    @Test
+    @DisplayName("Test for update album wich throws exception")
+    public void testUpdateAlbumThrowException() {
+        given(artistRepository.findById(anyLong())).willReturn(Optional.of(artist));
+        lenient().when(artistRepository.save(null)).thenReturn(null);
+
+        ArtistException artistException;
+
+        artistException = assertThrows(ArtistException.class, () -> {
+            this.artistService.update(anyLong(), null);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, artistException.getHttpStatus());
+        verify(this.artistRepository, times(0)).save(artist);
+
+    }
+
+    @Test
+    @DisplayName("Test find Category by Id")
+    public void testFindAlbumById() {
+        Long artistId = 1L;
+
+        List<Artist> artistList = new ArrayList<>();
+        artistList.add(artist);
+
+        given(artistRepository.findById(artistId)).willReturn(Optional.of(artist));
+
+        ArtistDTO artistDTO = artistService.findById(artistId);
+
+        assertThat(artistDTO).isNotNull();
+
+    }
+
+    @Test
+    @DisplayName("Test find Artist by id throw exception")
+    public void testFindArtistByIdAllThrowException() {
+        Long artistId = 1L;
+        when(this.artistRepository.findById(artistId)).thenThrow(IllegalStateException.class);
+
+        ArtistException artistException;
+
+        artistException = assertThrows(ArtistException.class, () -> {
+            this.artistService.findById(artistId);
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, artistException.getHttpStatus());
+        verify(this.artistRepository, times(1)).findById(artistId);
+    }
+
+    @Test
+    @DisplayName("Test find category by id throw Category Exception")
+    public void testFindCategoryByIdAllThrowCategoryException() {
+        Long artistId = 1L;
+        when(this.artistRepository.findById(artistId)).thenReturn(Optional.empty());
+
+        ArtistException artistException;
+
+        artistException = assertThrows(ArtistException.class, () -> {
+            this.artistService.findById(artistId);
+        });
+
+        assertEquals(HttpStatus.NOT_FOUND, artistException.getHttpStatus());
+        verify(this.artistRepository, times(1)).findById(artistId);
+    }
+
+    @Test
+    @DisplayName("Test for list all categories")
+    public void testListCategories() {
+        Long artistId = 1L;
+
+        List<Artist> artists = new ArrayList<>();
+        artists.add(artist);
+
+        //given(artistRepository.findAll()).willReturn(artists);
+
+        List<ArtistDTO> artistDTOList = artistService.list();
+
+        assertThat(artistDTOList.size()).isEqualTo(0);
+
+    }
+
+    @Test
+    @DisplayName("Test for list all artists wich throw exception")
+    public void testListArtistsThrowException() {
+       given(artistRepository.findAllByOrderByBandAsc()).willReturn(null);
+
+        ArtistException artistException;
+
+        artistException = assertThrows(ArtistException.class, () -> {
+            this.artistService.list();
+        });
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, artistException.getHttpStatus());
+        verify(this.artistRepository, times(1)).findAllByOrderByBandAsc();
 
     }
 
