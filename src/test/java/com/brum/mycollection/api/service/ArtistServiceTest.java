@@ -186,7 +186,7 @@ public class ArtistServiceTest {
     }
 
     @Test
-    @DisplayName("Test find category by id throw Category Exception")
+    @DisplayName("Test find artist by id throw Category Exception")
     public void testFindCategoryByIdAllThrowCategoryException() {
         Long artistId = 1L;
         when(this.artistRepository.findById(artistId)).thenReturn(Optional.empty());
