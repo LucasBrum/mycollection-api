@@ -154,7 +154,7 @@ public class ArtistServiceTest {
     }
 
     @Test
-    @DisplayName("Test find Category by Id")
+    @DisplayName("Test find Artist by Id")
     public void testFindAlbumById() {
         Long artistId = 1L;
 
@@ -186,7 +186,7 @@ public class ArtistServiceTest {
     }
 
     @Test
-    @DisplayName("Test find artist by id throw Category Exception")
+    @DisplayName("Test find artist by id throw Artist Exception")
     public void testFindCategoryByIdAllThrowCategoryException() {
         Long artistId = 1L;
         when(this.artistRepository.findById(artistId)).thenReturn(Optional.empty());
@@ -202,14 +202,12 @@ public class ArtistServiceTest {
     }
 
     @Test
-    @DisplayName("Test for list all categories")
+    @DisplayName("Test for list all artists")
     public void testListCategories() {
         Long artistId = 1L;
 
         List<Artist> artists = new ArrayList<>();
         artists.add(artist);
-
-        //given(artistRepository.findAll()).willReturn(artists);
 
         List<ArtistDTO> artistDTOList = artistService.list();
 
