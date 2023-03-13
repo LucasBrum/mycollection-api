@@ -10,4 +10,6 @@ import java.util.List;
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
     List<Artist> findAllByOrderByBandAsc();
+
+    Boolean existsArtistByBandAndTitle(String band, String title);
 }
