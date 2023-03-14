@@ -2,14 +2,18 @@ package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.entity.CoverImage;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.repository.ArtistRepository;
+import com.brum.mycollection.api.repository.CoverImageRepository;
 import com.brum.mycollection.api.service.ArtistService;
+import com.brum.mycollection.api.util.ImageUtility;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,16 +23,19 @@ public class ArtistServiceImpl implements ArtistService {
 
 	private final ArtistRepository artistRepository;
 
+	private final CoverImageRepository coverImageRepository;
+
 	private final ModelMapper mapper;
 
 	@Autowired
-	public ArtistServiceImpl(ArtistRepository artistRepository) {
+	public ArtistServiceImpl(ArtistRepository artistRepository, CoverImageRepository coverImageRepository) {
 		this.mapper = new ModelMapper();
 		this.artistRepository = artistRepository;
+		this.coverImageRepository = coverImageRepository;
 	}
 
 	@Override
-	public ArtistDTO create(ArtistDTO artistDTO) {
+	public ArtistDTO create(ArtistDTO artistDTO, MultipartFile file) {
 		Boolean artistFounded = artistRepository.existsArtistByBandAndTitle(artistDTO.getBand(), artistDTO.getTitle());
 
 		if (artistFounded) {
@@ -36,11 +43,17 @@ public class ArtistServiceImpl implements ArtistService {
 		}
 
 		try {
-
             Artist artist = this.mapper.map(artistDTO, Artist.class);
-
 			this.artistRepository.save(artist);
 			artistDTO = mapper.map(artist, ArtistDTO.class);
+
+			CoverImage coverImage = CoverImage.builder()
+					.artistId(artistDTO.getId())
+					.image(ImageUtility.compressImage(file.getBytes()))
+					.name(artistDTO.getBand().toLowerCase() + "-" + artistDTO.getTitle().toLowerCase())
+					.type(file.getContentType()).build();
+
+			this.coverImageRepository.save(coverImage);
 
 			return artistDTO;
 		} catch (Exception e) {
