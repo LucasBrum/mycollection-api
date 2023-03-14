@@ -33,4 +33,5 @@ public class ArtistDTO {
 
     @NotBlank(message = "Informe a Categoria")
     private Category category;
+
 }
