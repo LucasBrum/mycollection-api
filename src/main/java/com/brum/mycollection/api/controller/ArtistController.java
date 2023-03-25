@@ -60,7 +60,7 @@ public class ArtistController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/cover/{id}")
+    @GetMapping("/album/cover/{id}")
     public ResponseEntity<byte[]> getCoverFromAlbum(@PathVariable Long id) {
         Optional<CoverImage> coverImage = coverImageRepository.findById(id);
         HttpHeaders headers = new HttpHeaders();
