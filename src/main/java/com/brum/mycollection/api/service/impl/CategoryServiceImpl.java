@@ -3,6 +3,7 @@ package com.brum.mycollection.api.service.impl;
 import com.brum.mycollection.api.dto.CategoryDTO;
 import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.CategoryException;
+import com.brum.mycollection.api.model.response.CategoryResponse;
 import com.brum.mycollection.api.repository.CategoryRepository;
 import com.brum.mycollection.api.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -78,10 +79,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> list() {
+    public List<CategoryResponse> list() {
         try {
             List<Category> categories = this.categoryRepository.findAllByOrderByNameAsc();
-            return this.mapper.map(categories, new TypeToken<List<CategoryDTO>>() {}.getType());
+            return this.mapper.map(categories, new TypeToken<List<CategoryResponse>>() {}.getType());
         } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

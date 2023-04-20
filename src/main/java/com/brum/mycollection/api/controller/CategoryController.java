@@ -2,6 +2,7 @@ package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.dto.CategoryDTO;
 import com.brum.mycollection.api.model.Response;
+import com.brum.mycollection.api.model.response.CategoryResponse;
 import com.brum.mycollection.api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,11 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<CategoryDTO>>> list() {
-        List<CategoryDTO> categoryDTOList = this.categoryService.list();
+    public ResponseEntity<Response<List<CategoryResponse>>> list() {
+        List<CategoryResponse> categoryResponseList = this.categoryService.list();
 
-        Response<List<CategoryDTO>> response = new Response<>();
-        response.setData(categoryDTOList);
+        Response<List<CategoryResponse>> response = new Response<>();
+        response.setData(categoryResponseList);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

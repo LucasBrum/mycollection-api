@@ -1,9 +1,7 @@
 package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.dto.ArtistDTO;
-import com.brum.mycollection.api.entity.CoverImage;
 import com.brum.mycollection.api.model.Response;
-import com.brum.mycollection.api.repository.CoverImageRepository;
 import com.brum.mycollection.api.service.ArtistService;
 import com.brum.mycollection.api.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/artists")
@@ -25,12 +22,10 @@ public class ArtistController {
     @Autowired
     private ArtistService artistService;
 
-    @Autowired
-    private CoverImageRepository coverImageRepository;
 
-    @PostMapping
-    public ResponseEntity<Response<ArtistDTO>> create(@RequestPart("artist") ArtistDTO artistDTO, @RequestPart("image") MultipartFile file) throws IOException {
-        ArtistDTO artistCreated = this.artistService.create(artistDTO, file);
+    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Response<ArtistDTO>> create(@RequestPart("artist") ArtistDTO artistDTO, @RequestPart("coverImage") MultipartFile coverImageFile) throws IOException {
+        ArtistDTO artistCreated = this.artistService.create(artistDTO, coverImageFile);
         Response<ArtistDTO> response = new Response<>();
         response.setData(artistCreated);
         response.setStatusCode(HttpStatus.CREATED.value());
@@ -62,11 +57,11 @@ public class ArtistController {
 
     @GetMapping("/album/cover/{id}")
     public ResponseEntity<byte[]> getCoverFromAlbum(@PathVariable Long id) {
-        Optional<CoverImage> coverImage = coverImageRepository.findById(id);
+        byte[] coverImage = this.artistService.findCoverImageById(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf(coverImage.get().getType()));
+        headers.setContentType(MediaType.valueOf("image/png"));
 
-        return new ResponseEntity<>(ImageUtility.decompressImage(coverImage.get().getImage()), headers, HttpStatus.OK);
+        return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
     }
 
 

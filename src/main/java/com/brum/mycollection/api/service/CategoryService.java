@@ -1,6 +1,7 @@
 package com.brum.mycollection.api.service;
 
 import com.brum.mycollection.api.dto.CategoryDTO;
+import com.brum.mycollection.api.model.response.CategoryResponse;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface CategoryService {
 
     CategoryDTO findById(Long id);
 
-    List<CategoryDTO> list();
+    List<CategoryResponse> list();
 
     void delete(Long id);
 
