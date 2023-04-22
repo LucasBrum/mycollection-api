@@ -3,6 +3,7 @@ package com.brum.mycollection.api.service.impl;
 import com.brum.mycollection.api.dto.CategoryDTO;
 import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.CategoryException;
+import com.brum.mycollection.api.model.request.CategoryRequest;
 import com.brum.mycollection.api.model.response.CategoryResponse;
 import com.brum.mycollection.api.repository.CategoryRepository;
 import com.brum.mycollection.api.service.CategoryService;
@@ -27,17 +28,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO create(CategoryDTO categoryDTO) {
+    public CategoryResponse create(CategoryRequest categoryRequest) {
         try {
-            Category category = this.mapper.map(categoryDTO, Category.class);
+            Category category = this.mapper.map(categoryRequest, Category.class);
 
-            validateCategoryName(categoryDTO);
-            verifyCategoryName(categoryDTO);
+            validateCategoryName(categoryRequest);
+            verifyIfCategoryNameExists(categoryRequest);
 
             this.categoryRepository.save(category);
-            categoryDTO = mapper.map(category, CategoryDTO.class);
-
-            return categoryDTO;
+            var categoryResponse = mapper.map(category, CategoryResponse.class);
+            return categoryResponse;
         } catch (CategoryException cex) {
             throw cex;
         } catch (Exception e) {
@@ -46,27 +46,27 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO update(Long id, CategoryDTO categoryDTO) {
+    public CategoryResponse update(Long id, CategoryRequest categoryRequest) {
+        Category category = this.mapper.map(categoryRequest, Category.class);
         this.findById(id);
         try {
-
-            categoryDTO.setId(id);
-            Category category = mapper.map(categoryDTO, Category.class);
+            category.setId(id);
             this.categoryRepository.save(category);
-            categoryDTO = mapper.map(category, CategoryDTO.class);
-            return categoryDTO;
+            var categoryResponse = mapper.map(category, CategoryResponse.class);
+
+            return categoryResponse;
         } catch (Exception e) {
             throw new CategoryException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public CategoryDTO findById(Long id) {
+    public CategoryResponse findById(Long id) {
         try {
             Optional<Category> category = this.categoryRepository.findById(id);
             if (category.isPresent()) {
-                CategoryDTO categoryDTO = mapper.map(category.get(), CategoryDTO.class);
-                return categoryDTO;
+                CategoryResponse categoryResponse = mapper.map(category.get(), CategoryResponse.class);
+                return categoryResponse;
             }
 
             throw new CategoryException("Categoria não encontrada.", HttpStatus.NOT_FOUND);
@@ -99,15 +99,15 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    private void verifyCategoryName(CategoryDTO categoryDTO) {
-        Boolean categoryExistsByName = categoryRepository.existsByName(categoryDTO.getName());
+    private void verifyIfCategoryNameExists(CategoryRequest categoryRequest) {
+        Boolean categoryExistsByName = categoryRepository.existsByName(categoryRequest.getName());
         if (categoryExistsByName) {
             throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
         }
     }
 
-    private void validateCategoryName(CategoryDTO categoryDTO) {
-        if (categoryDTO.getName() == null || categoryDTO.getName().equals("")) {
+    private void validateCategoryName(CategoryRequest categoryRequest) {
+        if (categoryRequest.getName() == null || categoryRequest.getName().equals("")) {
             throw new CategoryException("O nome da categoria deve ser preenchida.", HttpStatus.BAD_REQUEST);
         }
     }
