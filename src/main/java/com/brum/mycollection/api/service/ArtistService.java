@@ -1,6 +1,8 @@
 package com.brum.mycollection.api.service;
 
 import com.brum.mycollection.api.dto.ArtistDTO;
+import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -8,13 +10,13 @@ import java.util.List;
 
 public interface ArtistService {
 
-    ArtistDTO create(ArtistDTO categoryDTO, MultipartFile file) throws IOException;
+    ArtistResponse create(ArtistRequest artistRequest, MultipartFile file) throws IOException;
 
-    ArtistDTO update(Long id, ArtistDTO categoryDTO);
+    ArtistResponse update(Long id, ArtistRequest artistRequest);
 
-    ArtistDTO findById(Long id);
+    ArtistResponse findById(Long id);
 
-    List<ArtistDTO> list();
+    List<ArtistResponse> list();
 
     void delete(Long id);
 

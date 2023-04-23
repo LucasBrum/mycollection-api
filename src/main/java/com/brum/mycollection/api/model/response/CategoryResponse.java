@@ -1,5 +1,6 @@
 package com.brum.mycollection.api.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,10 +16,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class CategoryResponse {
 
+    @JsonIgnore
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("descricao")
+    @JsonProperty("description")
     @NotBlank(message = "Informe a descrição da Categoria")
     private String name;
 }

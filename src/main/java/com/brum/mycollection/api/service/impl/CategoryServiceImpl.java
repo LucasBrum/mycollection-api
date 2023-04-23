@@ -1,6 +1,5 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.dto.CategoryDTO;
 import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.CategoryException;
 import com.brum.mycollection.api.model.request.CategoryRequest;

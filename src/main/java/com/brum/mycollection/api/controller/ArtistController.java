@@ -2,6 +2,8 @@ package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.model.Response;
+import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.service.ArtistService;
 import com.brum.mycollection.api.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,32 +26,32 @@ public class ArtistController {
 
 
     @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Response<ArtistDTO>> create(@RequestPart("artist") ArtistDTO artistDTO, @RequestPart("coverImage") MultipartFile coverImageFile) throws IOException {
-        ArtistDTO artistCreated = this.artistService.create(artistDTO, coverImageFile);
-        Response<ArtistDTO> response = new Response<>();
-        response.setData(artistCreated);
+    public ResponseEntity<Response<ArtistResponse>> create(@RequestPart("artist") ArtistRequest artistRequest, @RequestPart("coverImage") MultipartFile coverImageFile) throws IOException {
+        ArtistResponse artistCreatedResponse = this.artistService.create(artistRequest, coverImageFile);
+        Response<ArtistResponse> response = new Response<>();
+        response.setData(artistCreatedResponse);
         response.setStatusCode(HttpStatus.CREATED.value());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<ArtistDTO>>> list() {
-        List<ArtistDTO> artistDTOList = this.artistService.list();
+    public ResponseEntity<Response<List<ArtistResponse>>> list() {
+        List<ArtistResponse> artistListResponse = this.artistService.list();
 
-        Response<List<ArtistDTO>> response = new Response<>();
-        response.setData(artistDTOList);
+        Response<List<ArtistResponse>> response = new Response<>();
+        response.setData(artistListResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<ArtistDTO>> findById(@PathVariable Long id) {
-        ArtistDTO artistDTO = this.artistService.findById(id);
+    public ResponseEntity<Response<ArtistResponse>> findById(@PathVariable Long id) {
+        ArtistResponse artistResponse = this.artistService.findById(id);
 
-        Response<ArtistDTO> response = new Response<>();
-        response.setData(artistDTO);
+        Response<ArtistResponse> response = new Response<>();
+        response.setData(artistResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -66,11 +68,11 @@ public class ArtistController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<ArtistDTO>> update(@PathVariable Long id, @RequestBody ArtistDTO artistDTO) {
-        ArtistDTO artistUpdated = artistService.update(id, artistDTO);
+    public ResponseEntity<Response<ArtistResponse>> update(@PathVariable Long id, @RequestBody ArtistRequest artistRequest) {
+        ArtistResponse artistResponse = artistService.update(id, artistRequest);
 
-        Response<ArtistDTO> response = new Response<>();
-        response.setData(artistUpdated);
+        Response<ArtistResponse> response = new Response<>();
+        response.setData(artistResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

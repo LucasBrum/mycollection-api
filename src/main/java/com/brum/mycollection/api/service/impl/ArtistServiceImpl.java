@@ -3,6 +3,8 @@ package com.brum.mycollection.api.service.impl;
 import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.exception.ArtistException;
+import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.repository.ArtistRepository;
 import com.brum.mycollection.api.service.ArtistService;
 import com.brum.mycollection.api.util.ImageUtility;
@@ -31,54 +33,46 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public ArtistDTO create(ArtistDTO artistDTO, MultipartFile file) throws IOException {
-		Boolean artistFounded = artistRepository.existsArtistByBandAndTitle(artistDTO.getBand(), artistDTO.getTitle());
+	public ArtistResponse create(ArtistRequest artistRequest, MultipartFile file) throws IOException {
+		Boolean isArtistFounded = artistRepository.existsArtistByBandAndTitle(artistRequest.getBand(), artistRequest.getTitle());
 
-		if (artistFounded) {
+		if (isArtistFounded) {
 			throw new ArtistException("Album já cadastrado.", HttpStatus.BAD_REQUEST);
 		}
 
 		try {
-            Artist artist = this.mapper.map(artistDTO, Artist.class);
+            Artist artist = this.mapper.map(artistRequest, Artist.class);
 			artist.setCoverImage(ImageUtility.compressImage(file.getBytes()));
 			this.artistRepository.save(artist);
-			artistDTO = mapper.map(artist, ArtistDTO.class);
+			var artistResponse = mapper.map(artist, ArtistResponse.class);
 
-//			CoverImage coverImage = CoverImage.builder()
-//					.artistId(artistDTO.getId())
-//					.image(ImageUtility.compressImage(file.getBytes()))
-//					.name(artistDTO.getBand().toLowerCase() + "-" + artistDTO.getTitle().toLowerCase())
-//					.type(file.getContentType()).build();
-//
-//			this.coverImageRepository.save(coverImage);
-
-			return artistDTO;
+			return artistResponse;
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
-	public ArtistDTO update(Long id, ArtistDTO artistDTO) {
-		ArtistDTO artistDTOFound = this.findById(id);
+	public ArtistResponse update(Long id, ArtistRequest artistRequest) {
+		Artist artist = this.mapper.map(artistRequest, Artist.class);
+		this.findById(id);
 		try {
-			artistDTO.setId(id);
-			Artist artist = mapper.map(artistDTO, Artist.class);
+			artist.setId(id);
 			this.artistRepository.save(artist);
-			artistDTO = mapper.map(artist, ArtistDTO.class);
-			return artistDTO;
+			var artistResponse = mapper.map(artist, ArtistResponse.class);
+			return artistResponse;
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
-	public ArtistDTO findById(Long id) {
+	public ArtistResponse findById(Long id) {
 		try {
 			Optional<Artist> artist = this.artistRepository.findById(id);
 			if (artist.isPresent()) {
-				ArtistDTO artistDTO = mapper.map(artist.get(), ArtistDTO.class);
-				return artistDTO;
+				ArtistResponse artistResponse = mapper.map(artist.get(), ArtistResponse.class);
+				return artistResponse;
 			}
 
 			throw new ArtistException("Artista não encontrado.", HttpStatus.NOT_FOUND);
@@ -107,11 +101,10 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public List<ArtistDTO> list() {
+	public List<ArtistResponse> list() {
 		try {
 			List<Artist> artists = this.artistRepository.findAllByOrderByBandAsc();
-			return this.mapper.map(artists, new TypeToken<List<ArtistDTO>>() {
-			}.getType());
+			return this.mapper.map(artists, new TypeToken<List<ArtistResponse>>() {}.getType());
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
