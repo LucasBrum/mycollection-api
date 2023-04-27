@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
@@ -20,7 +19,7 @@ public class CategoryResponse {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("description")
+    @JsonProperty("name")
     @NotBlank(message = "Informe a descrição da Categoria")
     private String name;
 }

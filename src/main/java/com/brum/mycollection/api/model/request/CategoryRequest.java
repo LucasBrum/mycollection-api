@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class CategoryRequest {
 
-    @JsonProperty("descricao")
+    @JsonProperty("name")
     @NotBlank(message = "Informe a descrição da Categoria")
     private String name;
 }

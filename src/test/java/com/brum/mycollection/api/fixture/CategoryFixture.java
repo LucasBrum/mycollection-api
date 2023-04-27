@@ -18,13 +18,13 @@ public class CategoryFixture {
 	public CategoryResponse getCategoryResponse() {
 		return CategoryResponse.builder()
 				.id(1L)
-				.name("CD")
+				.description("CD")
 				.build();
 	}
 
 	public CategoryRequest getCategoryRequest() {
 		return CategoryRequest.builder()
-				.name("CD")
+				.description("CD")
 				.build();
 	}
 }
