@@ -74,7 +74,7 @@ public class ArtistServiceTest {
     public void testCreateArtist() {
         given(artistRepository.save(artist)).willReturn(artist);
 
-        ArtistDTO savedArtist = artistService.create(artistDTO);
+        ArtistDTO savedArtist = artistService.create(artistDTO, null);
 
         assertThat(savedArtist).isNotNull();
     }
@@ -85,7 +85,7 @@ public class ArtistServiceTest {
         ArtistException artistException;
 
         artistException = assertThrows(ArtistException.class, () -> {
-            this.artistService.create(null);
+            this.artistService.create(null, null);
         });
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, artistException.getHttpStatus());
