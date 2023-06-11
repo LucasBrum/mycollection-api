@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.model.response;
 
-import com.brum.mycollection.api.entity.Category;
+import com.brum.mycollection.api.entity.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Builder
@@ -22,28 +23,14 @@ public class ArtistResponse {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("band")
-    @NotBlank(message = "Informe a Banda")
-    private String band;
-
-    @JsonProperty("title")
-    @NotBlank(message = "Informe o Título")
-    private String title;
-
-    @JsonProperty("releaseYear")
-    @NotBlank(message = "Informe o Ano de Lançamento")
-    private Integer releaseYear;
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("country")
-    @NotBlank(message = "Informe o País")
     private String country;
 
-    @JsonProperty("genre")
-    @NotBlank(message = "Informe o Gênero")
-    private String genre;
+    @JsonProperty("items")
+    private List<Item> items;
 
-    @JsonProperty("category")
-    @NotBlank(message = "Informe a Categoria")
-    private Category category;
 
 }

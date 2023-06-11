@@ -11,11 +11,11 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
-@Table
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "artists")
 public class Artist implements Serializable {
 
     private static final long serialVersionUID = -5115707874529054925L;
@@ -26,22 +26,10 @@ public class Artist implements Serializable {
     @GenericGenerator(name = "increment", strategy = "increment")
     private Long id;
 
-    private String band;
-
-    private String title;
-
-    private Integer releaseYear;
+    private String name;
 
     private String country;
 
-    private String genre;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @Column(name = "cover_image")
-    private byte[] coverImage;
 
 
 }

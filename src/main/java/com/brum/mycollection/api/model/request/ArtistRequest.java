@@ -17,28 +17,12 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class ArtistRequest {
 
-    @JsonProperty("band")
-    @NotBlank(message = "Informe a Banda")
-    private String band;
-
-    @JsonProperty("title")
-    @NotBlank(message = "Informe o Título")
-    private String title;
-
-    @JsonProperty("releaseYear")
-    @NotBlank(message = "Informe o Ano de Lançamento")
-    private Integer releaseYear;
+    @JsonProperty("name")
+    @NotBlank(message = "Informe o Artista")
+    private String name;
 
     @JsonProperty("country")
     @NotBlank(message = "Informe o País")
     private String country;
-
-    @JsonProperty("genre")
-    @NotBlank(message = "Informe o Gênero")
-    private String genre;
-
-    @JsonProperty("category")
-    @NotBlank(message = "Informe a Categoria")
-    private Category category;
 
 }

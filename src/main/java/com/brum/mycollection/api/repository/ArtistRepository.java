@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
 
-    List<Artist> findAllByOrderByBandAsc();
+    List<Artist> findAllByOrderByNameAsc();
 
-    Boolean existsArtistByBandAndTitle(String band, String title);
+    Boolean existsArtistByName(String name);
 }
