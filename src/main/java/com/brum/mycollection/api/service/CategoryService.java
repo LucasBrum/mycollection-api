@@ -1,18 +1,21 @@
 package com.brum.mycollection.api.service;
 
 import com.brum.mycollection.api.dto.CategoryDTO;
+import com.brum.mycollection.api.entity.Category;
+import com.brum.mycollection.api.model.request.CategoryRequest;
+import com.brum.mycollection.api.model.response.CategoryResponse;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryDTO create(CategoryDTO categoryDTO);
+    CategoryResponse create(CategoryRequest categoryRequest);
 
-    CategoryDTO update(Long id, CategoryDTO categoryDTO);
+    CategoryResponse update(Long id, CategoryRequest categoryRequest);
 
-    CategoryDTO findById(Long id);
+    CategoryResponse findById(Long id);
 
-    List<CategoryDTO> list();
+    List<CategoryResponse> list();
 
     void delete(Long id);
 

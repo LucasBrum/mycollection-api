@@ -1,7 +1,10 @@
 package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.dto.CategoryDTO;
+import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.model.Response;
+import com.brum.mycollection.api.model.request.CategoryRequest;
+import com.brum.mycollection.api.model.response.CategoryResponse;
 import com.brum.mycollection.api.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,43 +28,43 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<Response<CategoryDTO>> create(@RequestBody CategoryDTO categoryDTO) {
-            CategoryDTO categoryCreated = this.categoryService.create(categoryDTO);
-        Response<CategoryDTO> response = new Response<>();
-        response.setData(categoryCreated);
+    public ResponseEntity<Response<CategoryResponse>> create(@RequestBody CategoryRequest categoryRequest) {
+        CategoryResponse categoryResponse = this.categoryService.create(categoryRequest);
+        Response<CategoryResponse> response = new Response<>();
+        response.setData(categoryResponse);
         response.setStatusCode(HttpStatus.CREATED.value());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<CategoryDTO>>> list() {
-        List<CategoryDTO> categoryDTOList = this.categoryService.list();
+    public ResponseEntity<Response<List<CategoryResponse>>> list() {
+        List<CategoryResponse> categoryResponseList = this.categoryService.list();
 
-        Response<List<CategoryDTO>> response = new Response<>();
-        response.setData(categoryDTOList);
+        Response<List<CategoryResponse>> response = new Response<>();
+        response.setData(categoryResponseList);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<CategoryDTO>> findById(@PathVariable Long id) {
-        CategoryDTO categoryDTO = this.categoryService.findById(id);
+    public ResponseEntity<Response<CategoryResponse>> findById(@PathVariable Long id) {
+        CategoryResponse categoryResponse = this.categoryService.findById(id);
 
-        Response<CategoryDTO> response = new Response<>();
-        response.setData(categoryDTO);
+        Response<CategoryResponse> response = new Response<>();
+        response.setData(categoryResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<CategoryDTO>> update(@PathVariable Long id, @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO categoryUpdated = categoryService.update(id, categoryDTO);
+    public ResponseEntity<Response<CategoryResponse>> update(@PathVariable Long id, @RequestBody CategoryRequest categoryRequest) {
+        CategoryResponse categoryResponseUpdated = categoryService.update(id, categoryRequest);
 
-        Response<CategoryDTO> response = new Response<>();
-        response.setData(categoryUpdated);
+        Response<CategoryResponse> response = new Response<>();
+        response.setData(categoryResponseUpdated);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

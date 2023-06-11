@@ -40,4 +40,8 @@ public class Artist implements Serializable {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(name = "cover_image")
+    private byte[] coverImage;
+
+
 }
