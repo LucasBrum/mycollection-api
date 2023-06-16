@@ -2,6 +2,7 @@ package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.exception.ArtistException;
+import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.repository.ArtistRepository;
@@ -22,26 +23,24 @@ public class ArtistServiceImpl implements ArtistService {
 
 	private final ArtistRepository artistRepository;
 
-	private final ModelMapper mapper;
-
 	@Autowired
 	public ArtistServiceImpl(ArtistRepository artistRepository) {
-		this.mapper = new ModelMapper();
 		this.artistRepository = artistRepository;
 	}
 
 	@Override
 	public ArtistResponse create(ArtistRequest artistRequest) {
-		Boolean isArtistFounded = artistRepository.existsArtistByName(artistRequest.getName());
+		Boolean isArtistFounded = artistRepository.existsArtistByName(artistRequest.name());
 
 		if (isArtistFounded) {
 			throw new ArtistException("Album já cadastrado.", HttpStatus.BAD_REQUEST);
 		}
 
 		try {
-            Artist artist = this.mapper.map(artistRequest, Artist.class);
+            Artist artist = ArtistMapper.toEntity(artistRequest);
 			this.artistRepository.save(artist);
-			var artistResponse = mapper.map(artist, ArtistResponse.class);
+
+			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
 
 			return artistResponse;
 		} catch (Exception e) {
@@ -51,12 +50,12 @@ public class ArtistServiceImpl implements ArtistService {
 
 	@Override
 	public ArtistResponse update(Long id, ArtistRequest artistRequest) {
-		Artist artist = this.mapper.map(artistRequest, Artist.class);
+		Artist artist = ArtistMapper.toEntity(artistRequest);
 		this.findById(id);
 		try {
 			artist.setId(id);
 			this.artistRepository.save(artist);
-			var artistResponse = mapper.map(artist, ArtistResponse.class);
+			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
 			return artistResponse;
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,7 +67,7 @@ public class ArtistServiceImpl implements ArtistService {
 		try {
 			Optional<Artist> artist = this.artistRepository.findById(id);
 			if (artist.isPresent()) {
-				ArtistResponse artistResponse = mapper.map(artist.get(), ArtistResponse.class);
+				ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
 				return artistResponse;
 			}
 
@@ -86,7 +85,7 @@ public class ArtistServiceImpl implements ArtistService {
 	public List<ArtistResponse> list() {
 		try {
 			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
-			return this.mapper.map(artists, new TypeToken<List<ArtistResponse>>() {}.getType());
+			return ArtistMapper.toResponseList(artists);
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
