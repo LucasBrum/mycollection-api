@@ -1,9 +1,14 @@
 package com.brum.mycollection.api.service.impl;
 
+import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.entity.Item;
 import com.brum.mycollection.api.exception.ArtistException;
+import com.brum.mycollection.api.mapper.ArtistMapper;
+import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.model.request.ItemRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.model.response.ItemResponse;
+import com.brum.mycollection.api.model.response.ItemResponseWithCoverImage;
 import com.brum.mycollection.api.repository.ItemRepository;
 import com.brum.mycollection.api.service.ItemService;
 import com.brum.mycollection.api.util.ImageUtility;
@@ -14,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,27 +27,24 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
 
-    private final ModelMapper modelMapper;
-
     @Autowired
     public ItemServiceImpl(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
-        this.modelMapper = new ModelMapper();
     }
 
     @Override
     public ItemResponse create(ItemRequest itemRequest, MultipartFile file) throws IOException {
-        Boolean isArtistFounded = itemRepository.existsArtistByTitle(itemRequest.getTitle());
+        Boolean isArtistFounded = itemRepository.existsArtistByTitle(itemRequest.title());
 
         if (isArtistFounded) {
             throw new ArtistException("Album já cadastrado.", HttpStatus.BAD_REQUEST);
         }
 
         try {
-            Item item = this.modelMapper.map(itemRequest, Item.class);
+            Item item = ItemMapper.toEntity(itemRequest);
             item.setCoverImage(ImageUtility.compressImage(file.getBytes()));
             this.itemRepository.save(item);
-            ItemResponse itemResponse = modelMapper.map(item, ItemResponse.class);
+            ItemResponse itemResponse = ItemMapper.toResponse(item);
 
             return itemResponse;
         } catch (Exception e) {
@@ -65,5 +68,26 @@ public class ItemServiceImpl implements ItemService {
             throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public List<ItemResponse> listAll() {
+        try {
+            List<Item> itemList = this.itemRepository.findAll();
+            return ItemMapper.toResponseList(itemList);
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public List<ItemResponseWithCoverImage> listAllWithCoverImage() {
+        try {
+            List<Item> itemList = this.itemRepository.findAll();
+            return ItemMapper.toResponseListWithCoverImage(itemList);
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 }

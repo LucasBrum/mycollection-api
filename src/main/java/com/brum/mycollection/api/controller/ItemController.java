@@ -2,7 +2,9 @@ package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.model.Response;
 import com.brum.mycollection.api.model.request.ItemRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.model.response.ItemResponse;
+import com.brum.mycollection.api.model.response.ItemResponseWithCoverImage;
 import com.brum.mycollection.api.service.ItemService;
 import com.brum.mycollection.api.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/items")
@@ -44,4 +47,27 @@ public class ItemController {
 
         return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
     }
+
+    @GetMapping
+    public ResponseEntity<Response<List<ItemResponse>>> listAll() {
+        List<ItemResponse> itemResponseList = this.itemService.listAll();
+
+        Response<List<ItemResponse>> response = new Response<>();
+        response.setData(itemResponseList);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/cover-images")
+    public ResponseEntity<Response<List<ItemResponseWithCoverImage>>> listAllWithCoverImage() {
+        List<ItemResponseWithCoverImage> itemResponseWithCoverImages = this.itemService.listAllWithCoverImage();
+
+        Response<List<ItemResponseWithCoverImage>> response = new Response<>();
+        response.setData(itemResponseWithCoverImages);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

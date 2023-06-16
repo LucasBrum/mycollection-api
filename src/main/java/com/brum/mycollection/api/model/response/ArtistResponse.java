@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public record ArtistResponse(
-        @JsonIgnore
+
         @JsonProperty("id")
         Long id,
 
