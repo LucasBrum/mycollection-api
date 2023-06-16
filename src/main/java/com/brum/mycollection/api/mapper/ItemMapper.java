@@ -3,7 +3,7 @@ package com.brum.mycollection.api.mapper;
 import com.brum.mycollection.api.entity.Item;
 import com.brum.mycollection.api.model.request.ItemRequest;
 import com.brum.mycollection.api.model.response.ItemResponse;
-import com.brum.mycollection.api.model.response.ItemResponseWithCoverImage;
+import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public class ItemMapper {
         return itemResponse;
     }
 
-    public static ItemResponseWithCoverImage toResponseWithCoverImage(Item item) {
-        ItemResponseWithCoverImage itemResponseWithCoverImage = new ItemResponseWithCoverImage(
+    public static ItemWithCoverImageResponse toResponseWithCoverImage(Item item) {
+        ItemWithCoverImageResponse itemWithCoverImageResponse = new ItemWithCoverImageResponse(
                 item.getId(),
                 item.getTitle(),
                 item.getReleaseYear(),
@@ -35,7 +35,7 @@ public class ItemMapper {
                 item.getCoverImage()
 
         );
-        return itemResponseWithCoverImage;
+        return itemWithCoverImageResponse;
     }
 
     public static Item toEntity(ItemRequest itemRequest) {
@@ -57,10 +57,10 @@ public class ItemMapper {
         return itemResponseList;
     }
 
-    public static List<ItemResponseWithCoverImage> toResponseListWithCoverImage(List<Item> ItemList) {
-        List<ItemResponseWithCoverImage> itemResponseWithCoverImages = ItemList.stream().map(ItemMapper::toResponseWithCoverImage).toList();
+    public static List<ItemWithCoverImageResponse> toResponseListWithCoverImage(List<Item> ItemList) {
+        List<ItemWithCoverImageResponse> itemWithCoverImageResponses = ItemList.stream().map(ItemMapper::toResponseWithCoverImage).toList();
 
-        return itemResponseWithCoverImages;
+        return itemWithCoverImageResponses;
     }
 
 }

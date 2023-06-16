@@ -14,8 +14,7 @@ public class ArtistMapper {
         ArtistResponse artistResponse = new ArtistResponse(
                 artist.getId(),
                 artist.getName(),
-                artist.getCountry(),
-                null
+                artist.getCountry()
 
         );
         return artistResponse;

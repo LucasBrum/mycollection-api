@@ -4,18 +4,18 @@ import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.repository.ArtistRepository;
 import com.brum.mycollection.api.service.ArtistService;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -82,13 +82,34 @@ public class ArtistServiceImpl implements ArtistService {
 
 
 	@Override
-	public List<ArtistResponse> list() {
+	public List<ArtistResponse> listAll() {
 		try {
 			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
 			return ArtistMapper.toResponseList(artists);
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@Override
+	public List<ArtistResponse> listAllWithItems() {
+		try {
+			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
+			return ArtistMapper.toResponseList(artists);
+		} catch (Exception e) {
+			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@Override
+	public List<ArtistItemDetailsResponse> listAllArtistsAndItems() {
+		List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsAndItems().stream().map(a -> {
+			ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
+
+			return artistDTO;
+		}).collect(Collectors.toList());
+
+		return artists;
 	}
 
 	@Override

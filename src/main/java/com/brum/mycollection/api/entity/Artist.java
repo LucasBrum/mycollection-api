@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,7 +30,5 @@ public class Artist implements Serializable {
     private String name;
 
     private String country;
-
-
 
 }

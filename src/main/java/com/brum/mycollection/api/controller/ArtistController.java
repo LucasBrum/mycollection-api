@@ -2,6 +2,7 @@ package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.model.Response;
 import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,21 @@ public class ArtistController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<ArtistResponse>>> list() {
-        List<ArtistResponse> artistListResponse = this.artistService.list();
+    public ResponseEntity<Response<List<ArtistResponse>>> listAll() {
+        List<ArtistResponse> artistListResponse = this.artistService.listAll();
 
         Response<List<ArtistResponse>> response = new Response<>();
+        response.setData(artistListResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/items/details")
+    public ResponseEntity<Response<List<ArtistItemDetailsResponse>>> listAllArtistsAndItems() {
+        List<ArtistItemDetailsResponse> artistListResponse = this.artistService.listAllArtistsAndItems();
+
+        Response<List<ArtistItemDetailsResponse>> response = new Response<>();
         response.setData(artistListResponse);
         response.setStatusCode(HttpStatus.OK.value());
 

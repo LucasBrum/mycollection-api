@@ -1,18 +1,14 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.entity.Item;
 import com.brum.mycollection.api.exception.ArtistException;
-import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.model.request.ItemRequest;
-import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.model.response.ItemResponse;
-import com.brum.mycollection.api.model.response.ItemResponseWithCoverImage;
+import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import com.brum.mycollection.api.repository.ItemRepository;
 import com.brum.mycollection.api.service.ItemService;
 import com.brum.mycollection.api.util.ImageUtility;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -80,7 +76,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemResponseWithCoverImage> listAllWithCoverImage() {
+    public List<ItemWithCoverImageResponse> listAllWithCoverImage() {
         try {
             List<Item> itemList = this.itemRepository.findAll();
             return ItemMapper.toResponseListWithCoverImage(itemList);
