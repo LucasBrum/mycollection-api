@@ -102,10 +102,9 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public List<ArtistItemDetailsResponse> listAllArtistsAndItems() {
-		List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsAndItems().stream().map(a -> {
+	public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
+		List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
 			ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
-
 			return artistDTO;
 		}).collect(Collectors.toList());
 

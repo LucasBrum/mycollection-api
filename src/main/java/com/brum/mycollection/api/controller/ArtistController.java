@@ -42,8 +42,8 @@ public class ArtistController {
     }
 
     @GetMapping("/items/details")
-    public ResponseEntity<Response<List<ArtistItemDetailsResponse>>> listAllArtistsAndItems() {
-        List<ArtistItemDetailsResponse> artistListResponse = this.artistService.listAllArtistsAndItems();
+    public ResponseEntity<Response<List<ArtistItemDetailsResponse>>> listArtistsItemsDetails() {
+        List<ArtistItemDetailsResponse> artistListResponse = this.artistService.listArtistsItemsDetails();
 
         Response<List<ArtistItemDetailsResponse>> response = new Response<>();
         response.setData(artistListResponse);

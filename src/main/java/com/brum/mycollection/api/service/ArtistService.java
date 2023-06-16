@@ -14,7 +14,7 @@ public interface ArtistService {
 
     List<ArtistResponse> listAll();
     List<ArtistResponse> listAllWithItems();
-    List<ArtistItemDetailsResponse> listAllArtistsAndItems();
+    List<ArtistItemDetailsResponse> listArtistsItemsDetails();
 
     void delete(Long id);
 
