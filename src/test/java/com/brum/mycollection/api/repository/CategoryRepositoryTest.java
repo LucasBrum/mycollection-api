@@ -25,11 +25,6 @@ public class CategoryRepositoryTest {
     @Autowired
     private TestEntityManager testEntityManager;
 
-    @BeforeEach
-    void setup() {
-
-    }
-
     @Test
     @DisplayName("Test if category name exists and return true")
     void existsCategoryByNameIsTrue() {
