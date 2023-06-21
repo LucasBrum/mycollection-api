@@ -17,7 +17,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-		<java.version>17</java.version>
+		<java.version>11</java.version>
 		<docker.image.prefix>my-collection-api</docker.image.prefix>
 		<org.easymock.version>4.3</org.easymock.version>
 	</properties>
@@ -35,13 +35,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

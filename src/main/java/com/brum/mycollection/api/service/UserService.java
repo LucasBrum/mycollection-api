@@ -1,20 +1,22 @@
 package com.brum.mycollection.api.service;
 
 import com.brum.mycollection.api.dto.UserDTO;
+import com.brum.mycollection.api.model.request.UserRequest;
+import com.brum.mycollection.api.model.response.UserResponse;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserDTO create(UserDTO userDTO);
+    UserResponse create(UserRequest userRequest);
 
-    UserDTO update(Long id, UserDTO userDTO);
+    UserResponse update(Long id, UserRequest userRequest);
 
-    UserDTO findById(Long id);
+    UserResponse findById(Long id);
 
-    UserDTO findByUsername(String username);
+    UserResponse findByUsername(String username);
 
-    List<UserDTO> list();
+    List<UserResponse> list();
 
     void delete(Long id);
 }

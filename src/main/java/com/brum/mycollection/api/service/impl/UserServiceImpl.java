@@ -3,6 +3,9 @@ package com.brum.mycollection.api.service.impl;
 import com.brum.mycollection.api.dto.UserDTO;
 import com.brum.mycollection.api.entity.User;
 import com.brum.mycollection.api.exception.UserException;
+import com.brum.mycollection.api.mapper.UserMapper;
+import com.brum.mycollection.api.model.request.UserRequest;
+import com.brum.mycollection.api.model.response.UserResponse;
 import com.brum.mycollection.api.repository.UserRepository;
 import com.brum.mycollection.api.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -31,43 +34,40 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
+    public UserResponse create(UserRequest userRequest) {
         try {
-            User user = this.mapper.map(userDTO, User.class);
-
+            User user = UserMapper.toEntity(userRequest);
+            user.setPassword(encoder.encode(user.getPassword()));
             this.userRepository.save(user);
-            userDTO = mapper.map(user, UserDTO.class);
 
-            return userDTO;
-        } catch (UserException uex) {
-            throw uex;
+            UserResponse userResponse = UserMapper.toResponse(user);
+            return userResponse;
         } catch (Exception e) {
             throw new UserException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public UserDTO update(Long id, UserDTO userDTO) {
+    public UserResponse update(Long id, UserRequest userRequest) {
+        User user = UserMapper.toEntity(userRequest);
         this.findById(id);
         try {
-
-            userDTO.setId(id);
-            User user = mapper.map(userDTO, User.class);
+            user.setId(id);
             this.userRepository.save(user);
-            userDTO = mapper.map(user, UserDTO.class);
-            return userDTO;
+            UserResponse userResponse = UserMapper.toResponse(user);
+            return userResponse;
         } catch (Exception e) {
             throw new UserException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
-    public UserDTO findById(Long id) {
+    public UserResponse findById(Long id) {
         try {
             Optional<User> userOptional = this.userRepository.findById(id);
             if (userOptional.isPresent()) {
-                UserDTO userDTO = mapper.map(userOptional.get(), UserDTO.class);
-                return userDTO;
+                UserResponse userResponse = UserMapper.toResponse(userOptional.get());
+                return userResponse;
             }
 
             throw new UserException("Usuário não encontrado.", HttpStatus.NOT_FOUND);
@@ -80,15 +80,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO findByUsername(String username) {
+    public UserResponse findByUsername(String username) {
         try{
             Optional<User> userOptional = this.userRepository.findByUsername(username);
             if(userOptional.isPresent()) {
-                UserDTO userDTO = mapper.map(userOptional.get(), UserDTO.class);
+                UserResponse userResponse = UserMapper.toResponse(userOptional.get());
 
-                return userDTO;
+                return userResponse;
             }
-            throw new UserException("Usuário com o username não encontrado.", HttpStatus.NOT_FOUND);
+            throw new UserException("Usuário não encontrado.", HttpStatus.NOT_FOUND);
 
         } catch (UserException cex) {
             throw cex;
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> list() {
+    public List<UserResponse> list() {
         try {
             List<User> users = this.userRepository.findAll();
             return this.mapper.map(users, new TypeToken<List<UserDTO>>() {}.getType());

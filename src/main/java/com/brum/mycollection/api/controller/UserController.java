@@ -2,6 +2,8 @@ package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.dto.UserDTO;
 import com.brum.mycollection.api.model.Response;
+import com.brum.mycollection.api.model.request.UserRequest;
+import com.brum.mycollection.api.model.response.UserResponse;
 import com.brum.mycollection.api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,10 +32,9 @@ public class UserController {
     private PasswordEncoder encoder;
 
     @PostMapping
-    public ResponseEntity<Response<UserDTO>> create(@RequestBody UserDTO userDTO) {
-        userDTO.setPassword(encoder.encode(userDTO.getPassword()));
-        UserDTO userCreated = this.userService.create(userDTO);
-        Response<UserDTO> response = new Response<>();
+    public ResponseEntity<Response<UserResponse>> create(@RequestBody UserRequest userRequest) {
+        UserResponse userCreated = this.userService.create(userRequest);
+        Response<UserResponse> response = new Response<>();
         response.setData(userCreated);
         response.setStatusCode(HttpStatus.CREATED.value());
 
@@ -41,33 +42,33 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<UserDTO>>> list() {
-        List<UserDTO> userDTOList = this.userService.list();
+    public ResponseEntity<Response<List<UserResponse>>> list() {
+        List<UserResponse> userResponseList = this.userService.list();
 
-        Response<List<UserDTO>> response = new Response<>();
-        response.setData(userDTOList);
+        Response<List<UserResponse>> response = new Response<>();
+        response.setData(userResponseList);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Response<UserDTO>> findById(@PathVariable Long id) {
-        UserDTO userDTO = this.userService.findById(id);
+    public ResponseEntity<Response<UserResponse>> findById(@PathVariable Long id) {
+        UserResponse userResponse = this.userService.findById(id);
 
-        Response<UserDTO> response = new Response<>();
-        response.setData(userDTO);
+        Response<UserResponse> response = new Response<>();
+        response.setData(userResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<UserDTO>> update(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        UserDTO userDTOUpdated = this.userService.update(id, userDTO);
+    public ResponseEntity<Response<UserResponse>> update(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+        UserResponse userUpdated = this.userService.update(id, userRequest);
 
-        Response<UserDTO> response = new Response<>();
-        response.setData(userDTOUpdated);
+        Response<UserResponse> response = new Response<>();
+        response.setData(userUpdated);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -86,7 +87,7 @@ public class UserController {
 
     @GetMapping("validate-password")
     public ResponseEntity<Response<Boolean>> validatePassword(@RequestParam String username, @RequestParam String password) {
-        UserDTO user = userService.findByUsername(username);
+        UserResponse user = userService.findByUsername(username);
         Response<Boolean> response = new Response<>();
         if (user == null) {
             response.setData(false);
@@ -94,7 +95,7 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
-        boolean valid = encoder.matches(password, user.getPassword());
+        boolean valid = encoder.matches(password, user.password());
         HttpStatus status = (valid) ? HttpStatus.OK : HttpStatus.UNAUTHORIZED;
 
         response.setData(valid);
