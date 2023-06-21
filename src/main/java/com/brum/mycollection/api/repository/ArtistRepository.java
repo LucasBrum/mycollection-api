@@ -18,5 +18,6 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     @Query("SELECT new com.brum.mycollection.api.model.response.ArtistItemDetailsResponse(a.id, a.name, a.country, i.title, i.genre, i.category.name, i.releaseYear) FROM Artist a, Item i WHERE a.id = i.artist.id")
     List<ArtistItemDetailsResponse> getArtistsItemsDetails();
 
+
 }
 

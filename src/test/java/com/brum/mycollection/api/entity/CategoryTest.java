@@ -9,11 +9,11 @@ public class CategoryTest {
     public void testCreateNewCategory() {
         Category category = new Category();
         category.setId(1L);
-        category.setName("Dvd");
+        category.setName("DVD");
 
         Assertions.assertNotNull(category);
         Assertions.assertEquals(1L, category.getId());
-        Assertions.assertEquals("Dvd", category.getName());
+        Assertions.assertEquals("DVD", category.getName());
     }
 
     @Test
@@ -23,18 +23,18 @@ public class CategoryTest {
 
     @Test
     public void testCreateNewCategoryAllArgsConstructor() {
-        Category category = new Category(1L, "Dvd");
+        Category category = new Category(1L, "DVD");
 
         Assertions.assertNotNull(category);
         Assertions.assertEquals(1L, category.getId());
-        Assertions.assertEquals("Dvd", category.getName());
+        Assertions.assertEquals("DVD", category.getName());
     }
 
     @Test
     public void testCreateNewCategoryBuilder() {
-        Category category = Category.builder().id(1L).name("Dvd").build();
+        Category category = Category.builder().id(1L).name("DVD").build();
         Assertions.assertNotNull(category);
         Assertions.assertEquals(1L, category.getId());
-        Assertions.assertEquals("Dvd", category.getName());
+        Assertions.assertEquals("DVD", category.getName());
     }
 }
