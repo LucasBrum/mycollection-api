@@ -11,6 +11,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findAllByOrderByNameAsc();
 
-    Boolean existsByName(String name);
+    Boolean existsCategoryByName(String name);
 
 }

@@ -88,7 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void verifyIfCategoryNameExists(CategoryRequest categoryRequest) {
         log.info("Validando se categoria {} existe.", categoryRequest.name());
-        boolean categoryExistsByName = categoryRepository.existsByName(categoryRequest.name());
+        boolean categoryExistsByName = categoryRepository.existsCategoryByName(categoryRequest.name());
         if (categoryExistsByName) {
             throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
         }
