@@ -1,25 +1,25 @@
 package com.brum.mycollection.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "artists")
-public class Artist implements Serializable {
-
-    private static final long serialVersionUID = -5115707874529054925L;
+@Table(name = "items")
+public class Item implements Serializable {
 
     @Id
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -27,8 +27,19 @@ public class Artist implements Serializable {
     @GenericGenerator(name = "increment", strategy = "increment")
     private Long id;
 
-    private String name;
+    private String title;
 
-    private String country;
+    private Integer releaseYear;
 
+    private String genre;
+
+    @ManyToOne
+    private Category category;
+
+    private byte[] coverImage;
+
+    @ManyToOne
+    @JoinColumn(name = "artistId", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Artist artist;
 }

@@ -17,21 +17,9 @@ public class ArtistDTO {
     private Long id;
 
     @NotBlank(message = "Informe a Banda")
-    private String band;
-
-    @NotBlank(message = "Informe o Título")
-    private String title;
-
-    @NotBlank(message = "Informe o Ano de Lançamento")
-    private Integer releaseYear;
+    private String name;
 
     @NotBlank(message = "Informe o País")
     private String country;
-
-    @NotBlank(message = "Informe o Gênero")
-    private String genre;
-
-    @NotBlank(message = "Informe a Categoria")
-    private Category category;
 
 }

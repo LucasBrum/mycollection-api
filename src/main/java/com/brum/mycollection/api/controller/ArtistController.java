@@ -1,20 +1,15 @@
 package com.brum.mycollection.api.controller;
 
-import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.model.Response;
 import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.service.ArtistService;
-import com.brum.mycollection.api.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -25,9 +20,9 @@ public class ArtistController {
     private ArtistService artistService;
 
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Response<ArtistResponse>> create(@RequestPart("artist") ArtistRequest artistRequest, @RequestPart("coverImage") MultipartFile coverImageFile) throws IOException {
-        ArtistResponse artistCreatedResponse = this.artistService.create(artistRequest, coverImageFile);
+    @PostMapping
+    public ResponseEntity<Response<ArtistResponse>> create(@RequestBody ArtistRequest artistRequest) {
+        ArtistResponse artistCreatedResponse = this.artistService.create(artistRequest);
         Response<ArtistResponse> response = new Response<>();
         response.setData(artistCreatedResponse);
         response.setStatusCode(HttpStatus.CREATED.value());
@@ -36,10 +31,21 @@ public class ArtistController {
     }
 
     @GetMapping
-    public ResponseEntity<Response<List<ArtistResponse>>> list() {
-        List<ArtistResponse> artistListResponse = this.artistService.list();
+    public ResponseEntity<Response<List<ArtistResponse>>> listAll() {
+        List<ArtistResponse> artistListResponse = this.artistService.listAll();
 
         Response<List<ArtistResponse>> response = new Response<>();
+        response.setData(artistListResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/items/details")
+    public ResponseEntity<Response<List<ArtistItemDetailsResponse>>> listArtistsItemsDetails() {
+        List<ArtistItemDetailsResponse> artistListResponse = this.artistService.listArtistsItemsDetails();
+
+        Response<List<ArtistItemDetailsResponse>> response = new Response<>();
         response.setData(artistListResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
@@ -55,15 +61,6 @@ public class ArtistController {
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/album/cover/{id}")
-    public ResponseEntity<byte[]> getCoverFromAlbum(@PathVariable Long id) {
-        byte[] coverImage = this.artistService.findCoverImageById(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("image/png"));
-
-        return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
     }
 
 

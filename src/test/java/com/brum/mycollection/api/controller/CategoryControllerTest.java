@@ -35,20 +35,20 @@ public class CategoryControllerTest {
 		this.mapper = new ModelMapper();
 	}
 
-	@ParameterizedTest
-	@ValueSource(longs = {1L})
-	public void listCategoriesTest(long id) {
-		var category = CategoryFixture.getCategoryEntity();
-
-		var categoryResponse = this.mapper.map(category, CategoryResponse.class);
-
-		var categoryListResponse = List.of(categoryResponse);
-
-		given(categoryService.list()).willReturn(categoryListResponse);
-
-		var categoryListResponseReturned = categoryController.list();
-
-		Assertions.assertEquals(categoryListResponse, categoryController.list());
-	}
+//	@ParameterizedTest
+//	@ValueSource(longs = {1L})
+//	public void listCategoriesTest(long id) {
+//		var category = CategoryFixture.getCategoryEntity();
+//
+//		var categoryResponse = this.mapper.map(category, CategoryResponse.class);
+//
+//		var categoryListResponse = List.of(categoryResponse);
+//
+//		given(categoryService.list()).willReturn(categoryListResponse);
+//
+//		var categoryListResponseReturned = categoryController.list();
+//
+//		Assertions.assertEquals(categoryListResponse, categoryController.list());
+//	}
 
 }

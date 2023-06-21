@@ -1,50 +1,46 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.dto.ArtistDTO;
 import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.exception.ArtistException;
+import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
+import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.repository.ArtistRepository;
 import com.brum.mycollection.api.service.ArtistService;
-import com.brum.mycollection.api.util.ImageUtility;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class ArtistServiceImpl implements ArtistService {
 
 	private final ArtistRepository artistRepository;
 
-	private final ModelMapper mapper;
-
 	@Autowired
 	public ArtistServiceImpl(ArtistRepository artistRepository) {
-		this.mapper = new ModelMapper();
 		this.artistRepository = artistRepository;
 	}
 
 	@Override
-	public ArtistResponse create(ArtistRequest artistRequest, MultipartFile file) throws IOException {
-		Boolean isArtistFounded = artistRepository.existsArtistByBandAndTitle(artistRequest.getBand(), artistRequest.getTitle());
+	public ArtistResponse create(ArtistRequest artistRequest) {
+		Boolean isArtistFounded = artistRepository.existsArtistByName(artistRequest.name());
 
 		if (isArtistFounded) {
 			throw new ArtistException("Album já cadastrado.", HttpStatus.BAD_REQUEST);
 		}
 
 		try {
-            Artist artist = this.mapper.map(artistRequest, Artist.class);
-			artist.setCoverImage(ImageUtility.compressImage(file.getBytes()));
+            Artist artist = ArtistMapper.toEntity(artistRequest);
 			this.artistRepository.save(artist);
-			var artistResponse = mapper.map(artist, ArtistResponse.class);
+
+			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
 
 			return artistResponse;
 		} catch (Exception e) {
@@ -54,12 +50,12 @@ public class ArtistServiceImpl implements ArtistService {
 
 	@Override
 	public ArtistResponse update(Long id, ArtistRequest artistRequest) {
-		Artist artist = this.mapper.map(artistRequest, Artist.class);
+		Artist artist = ArtistMapper.toEntity(artistRequest);
 		this.findById(id);
 		try {
 			artist.setId(id);
 			this.artistRepository.save(artist);
-			var artistResponse = mapper.map(artist, ArtistResponse.class);
+			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
 			return artistResponse;
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -71,7 +67,7 @@ public class ArtistServiceImpl implements ArtistService {
 		try {
 			Optional<Artist> artist = this.artistRepository.findById(id);
 			if (artist.isPresent()) {
-				ArtistResponse artistResponse = mapper.map(artist.get(), ArtistResponse.class);
+				ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
 				return artistResponse;
 			}
 
@@ -83,31 +79,36 @@ public class ArtistServiceImpl implements ArtistService {
 		}
 	}
 
-	@Override
-	public byte[] findCoverImageById(Long id) {
-		try {
-			Optional<Artist> artist = this.artistRepository.findById(id);
-			if (artist.isPresent()) {
-				byte[] coverImage = artist.get().getCoverImage();
-				return coverImage;
-			}
 
-			throw new ArtistException("Artista não encontrado.", HttpStatus.NOT_FOUND);
-		} catch (ArtistException aex) {
-			throw aex;
+
+	@Override
+	public List<ArtistResponse> listAll() {
+		try {
+			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
+			return ArtistMapper.toResponseList(artists);
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@Override
-	public List<ArtistResponse> list() {
+	public List<ArtistResponse> listAllWithItems() {
 		try {
-			List<Artist> artists = this.artistRepository.findAllByOrderByBandAsc();
-			return this.mapper.map(artists, new TypeToken<List<ArtistResponse>>() {}.getType());
+			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
+			return ArtistMapper.toResponseList(artists);
 		} catch (Exception e) {
 			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@Override
+	public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
+		List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
+			ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
+			return artistDTO;
+		}).collect(Collectors.toList());
+
+		return artists;
 	}
 
 	@Override

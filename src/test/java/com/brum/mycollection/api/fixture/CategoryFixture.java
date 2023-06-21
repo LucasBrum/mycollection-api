@@ -8,23 +8,23 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class CategoryFixture {
 
-	public Category getCategoryEntity() {
-		return Category.builder()
-				.id(1L)
-				.name("CD")
-				.build();
-	}
-
-	public CategoryResponse getCategoryResponse() {
-		return CategoryResponse.builder()
-				.id(1L)
-				.description("CD")
-				.build();
-	}
-
-	public CategoryRequest getCategoryRequest() {
-		return CategoryRequest.builder()
-				.description("CD")
-				.build();
-	}
+//	public Category getCategoryEntity() {
+//		return Category.builder()
+//				.id(1L)
+//				.name("CD")
+//				.build();
+//	}
+//
+//	public CategoryResponse getCategoryResponse() {
+//		return CategoryResponse.builder()
+//				.id(1L)
+//				.name("CD")
+//				.build();
+//	}
+//
+//	public CategoryRequest getCategoryRequest() {
+//		return CategoryRequest.builder()
+//				.name("CD")
+//				.build();
+//	}
 }

@@ -15,11 +15,11 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
-@Table
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "categories")
 public class Category implements Serializable {
 
     private static final long serialVersionUID = -5115709874529054925L;
