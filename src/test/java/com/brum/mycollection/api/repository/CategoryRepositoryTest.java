@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -19,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CategoryRepositoryTest {
 
     public static final String CD = "CD";
+    public static final String DVD = "DVD";
+    public static final String BOOK = "Book";
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -39,8 +43,21 @@ public class CategoryRepositoryTest {
     @DisplayName("Test if category name exists and return false")
     void existsCategoryByNameIsFalse() {
 
-        Boolean existCategory= categoryRepository.existsCategoryByName(CD);
+        Boolean existCategory = categoryRepository.existsCategoryByName(CD);
         assertThat(existCategory).isFalse();
+    }
+
+    @Test
+    @DisplayName("Test Find All categories sorted by name ASC")
+    void findAllByOrderByNameAsc() {
+        createCategory(CD);
+        createCategory(DVD);
+        createCategory(BOOK);
+
+        List<Category> categoryList = categoryRepository.findAllByOrderByNameAsc();
+
+        assertThat(categoryList.size()).isEqualTo(3);
+        assertThat(categoryList.get(0).getName()).isEqualTo(BOOK);
     }
 
     private void createCategory(String categoria) {
