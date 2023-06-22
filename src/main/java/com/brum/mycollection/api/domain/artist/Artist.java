@@ -1,4 +1,4 @@
-package com.brum.mycollection.api.entity;
+package com.brum.mycollection.api.domain.artist;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Data
 @Entity

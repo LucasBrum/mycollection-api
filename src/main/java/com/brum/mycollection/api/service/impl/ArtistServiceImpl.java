@@ -1,6 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.domain.artist.Artist;
+import com.brum.mycollection.api.domain.artist.validations.ValidatorArtist;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
@@ -17,108 +18,109 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
 @Slf4j
+@Service
 public class ArtistServiceImpl implements ArtistService {
 
-	private final ArtistRepository artistRepository;
+    private final ArtistRepository artistRepository;
 
-	@Autowired
-	public ArtistServiceImpl(ArtistRepository artistRepository) {
-		this.artistRepository = artistRepository;
-	}
+    private final List<ValidatorArtist> validators;
 
-	@Override
-	public ArtistResponse create(ArtistRequest artistRequest) {
-		Boolean isArtistFounded = artistRepository.existsArtistByName(artistRequest.name());
+    @Autowired
+    public ArtistServiceImpl(ArtistRepository artistRepository, List<ValidatorArtist> validators) {
+        this.artistRepository = artistRepository;
+        this.validators = validators;
+    }
 
-		if (isArtistFounded) {
-			throw new ArtistException("Album já cadastrado.", HttpStatus.BAD_REQUEST);
-		}
-
-		try {
+    @Override
+    public ArtistResponse create(ArtistRequest artistRequest) {
+		log.info("Creating Artist");
+        validators.forEach(v -> v.validate(artistRequest));
+        try {
             Artist artist = ArtistMapper.toEntity(artistRequest);
-			this.artistRepository.save(artist);
+            this.artistRepository.save(artist);
 
-			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
+            ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
 
-			return artistResponse;
-		} catch (Exception e) {
-			throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+            return artistResponse;
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	@Override
-	public ArtistResponse update(Long id, ArtistRequest artistRequest) {
-		Artist artist = ArtistMapper.toEntity(artistRequest);
-		this.findById(id);
-		try {
-			artist.setId(id);
-			this.artistRepository.save(artist);
-			ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
-			return artistResponse;
-		} catch (Exception e) {
-			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public ArtistResponse update(Long id, ArtistRequest artistRequest) {
+		log.info("Updating Artist");
+        Artist artist = ArtistMapper.toEntity(artistRequest);
+        this.findById(id);
+        try {
+            artist.setId(id);
+            this.artistRepository.save(artist);
+            ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
+			log.info("Artist updated with success.");
+            return artistResponse;
+        } catch (Exception e) {
+            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	@Override
-	public ArtistResponse findById(Long id) {
-		try {
-			Optional<Artist> artist = this.artistRepository.findById(id);
-			if (artist.isPresent()) {
-				ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
-				return artistResponse;
-			}
+    @Override
+    public ArtistResponse findById(Long id) {
+		log.info("Searching Artist by Id {}.", id);
+        try {
+            Optional<Artist> artist = this.artistRepository.findById(id);
+            if (artist.isEmpty()) {
+                throw new ArtistException("Artist not found.", HttpStatus.NOT_FOUND);
+            }
+            ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
+            return artistResponse;
+        } catch (Exception e) {
+            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-			throw new ArtistException("Artista não encontrado.", HttpStatus.NOT_FOUND);
-		} catch (ArtistException aex) {
-			throw aex;
-		} catch (Exception e) {
-			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public List<ArtistResponse> listAll() {
+        log.info("Listing All Artists.");
+        try {
+            List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
+            return ArtistMapper.toResponseList(artists);
+        } catch (Exception e) {
+            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @Override
+    public List<ArtistResponse> listAllWithItems() {
+        log.info("Listing all Items.");
+        try {
+            List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
+            return ArtistMapper.toResponseList(artists);
+        } catch (Exception e) {
+            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
+    @Override
+    public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
+        log.info("Listing all items with details.");
+        List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
+            ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
+            return artistDTO;
+        }).collect(Collectors.toList());
 
-	@Override
-	public List<ArtistResponse> listAll() {
-		try {
-			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
-			return ArtistMapper.toResponseList(artists);
-		} catch (Exception e) {
-			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+        return artists;
+    }
 
-	@Override
-	public List<ArtistResponse> listAllWithItems() {
-		try {
-			List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
-			return ArtistMapper.toResponseList(artists);
-		} catch (Exception e) {
-			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@Override
-	public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
-		List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
-			ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
-			return artistDTO;
-		}).collect(Collectors.toList());
-
-		return artists;
-	}
-
-	@Override
-	public void delete(Long id) {
-		try {
-			this.findById(id);
-
-			this.artistRepository.deleteById(id);
-		} catch (ArtistException ce) {
-			throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @Override
+    public void delete(Long id) {
+        log.info("Deleting Artist.");
+        try {
+            this.findById(id);
+            this.artistRepository.deleteById(id);
+            log.info("Artist successfully deleted.");
+        } catch (ArtistException ce) {
+            throw new ArtistException("Internal server error.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

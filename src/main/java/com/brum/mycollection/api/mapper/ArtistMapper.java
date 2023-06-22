@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.mapper;
 
-import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.domain.artist.Artist;
 import com.brum.mycollection.api.model.request.ArtistRequest;
 import com.brum.mycollection.api.model.response.ArtistResponse;
 import org.springframework.stereotype.Component;

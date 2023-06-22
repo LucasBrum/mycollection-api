@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.mapper;
 
-import com.brum.mycollection.api.entity.Category;
+import com.brum.mycollection.api.domain.category.Category;
 import com.brum.mycollection.api.model.request.CategoryRequest;
 import com.brum.mycollection.api.model.response.CategoryResponse;
 import org.springframework.stereotype.Component;

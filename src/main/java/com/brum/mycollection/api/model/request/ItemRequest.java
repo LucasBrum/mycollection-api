@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.model.request;
 
-import com.brum.mycollection.api.entity.Artist;
-import com.brum.mycollection.api.entity.Category;
+import com.brum.mycollection.api.domain.artist.Artist;
+import com.brum.mycollection.api.domain.category.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Category;
+import com.brum.mycollection.api.domain.category.Category;
 import com.brum.mycollection.api.exception.CategoryException;
 import com.brum.mycollection.api.mapper.CategoryMapper;
 import com.brum.mycollection.api.model.request.CategoryRequest;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
+@Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 

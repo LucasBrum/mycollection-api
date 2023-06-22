@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.dto.UserDTO;
-import com.brum.mycollection.api.entity.User;
+import com.brum.mycollection.api.domain.user.User;
 import com.brum.mycollection.api.exception.UserException;
 import com.brum.mycollection.api.mapper.UserMapper;
 import com.brum.mycollection.api.model.request.UserRequest;
@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

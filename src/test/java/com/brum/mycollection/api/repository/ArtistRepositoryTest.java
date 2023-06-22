@@ -1,10 +1,9 @@
 package com.brum.mycollection.api.repository;
 
-import com.brum.mycollection.api.entity.Artist;
-import com.brum.mycollection.api.entity.Category;
-import com.brum.mycollection.api.entity.Item;
+import com.brum.mycollection.api.domain.artist.Artist;
+import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.domain.item.Item;
 import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

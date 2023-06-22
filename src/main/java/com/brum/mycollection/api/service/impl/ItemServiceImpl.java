@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Item;
+import com.brum.mycollection.api.domain.item.Item;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.model.request.ItemRequest;
