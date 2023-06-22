@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.domain.artist.Artist;
-import com.brum.mycollection.api.domain.artist.validations.ValidatorArtist;
+import com.brum.mycollection.api.domain.artist.validations.ArtistValidator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
@@ -24,10 +24,10 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
 
-    private final List<ValidatorArtist> validators;
+    private final List<ArtistValidator> validators;
 
     @Autowired
-    public ArtistServiceImpl(ArtistRepository artistRepository, List<ValidatorArtist> validators) {
+    public ArtistServiceImpl(ArtistRepository artistRepository, List<ArtistValidator> validators) {
         this.artistRepository = artistRepository;
         this.validators = validators;
     }
@@ -114,7 +114,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public void delete(Long id) {
-        log.info("Deleting Artist.");
+        log.info("Deleting Artist by Id {}", id);
         try {
             this.findById(id);
             this.artistRepository.deleteById(id);

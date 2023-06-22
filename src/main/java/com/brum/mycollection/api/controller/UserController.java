@@ -43,7 +43,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Response<List<UserResponse>>> list() {
-        List<UserResponse> userResponseList = this.userService.list();
+        List<UserResponse> userResponseList = this.userService.listAll();
 
         Response<List<UserResponse>> response = new Response<>();
         response.setData(userResponseList);

@@ -16,7 +16,7 @@ public interface UserService {
 
     UserResponse findByUsername(String username);
 
-    List<UserResponse> list();
+    List<UserResponse> listAll();
 
     void delete(Long id);
 }

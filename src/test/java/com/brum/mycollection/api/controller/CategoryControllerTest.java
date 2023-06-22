@@ -62,8 +62,8 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Test create a category with success Http Status 201 created")
     @WithMockUser
+    @DisplayName("Test create a category with success Http Status 201 created")
     void create() throws Exception {
         var response = mockMvc.perform(
                 post("/categories")

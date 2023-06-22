@@ -5,9 +5,8 @@ import com.brum.mycollection.api.model.request.ArtistRequest;
 
 import java.util.Optional;
 
-public interface ValidatorArtist {
+public interface ArtistValidator {
 
     void validate(ArtistRequest artistRequest);
 
-    Optional<Artist> validate(Long id);
 }

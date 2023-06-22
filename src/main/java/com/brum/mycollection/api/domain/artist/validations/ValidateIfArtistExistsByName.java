@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ValidateIfArtistExistsByName implements ValidatorArtist{
+public class ValidateIfArtistExistsByName implements ArtistValidator {
 
     private final ArtistRepository artistRepository;
 
