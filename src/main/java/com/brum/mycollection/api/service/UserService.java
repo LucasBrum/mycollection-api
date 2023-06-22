@@ -1,6 +1,5 @@
 package com.brum.mycollection.api.service;
 
-import com.brum.mycollection.api.dto.UserDTO;
 import com.brum.mycollection.api.model.request.UserRequest;
 import com.brum.mycollection.api.model.response.UserResponse;
 
