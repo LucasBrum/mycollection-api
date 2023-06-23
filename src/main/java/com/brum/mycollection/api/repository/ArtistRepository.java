@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.repository;
 
-import com.brum.mycollection.api.domain.artist.Artist;
+import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.model.response.ArtistItemDetailsResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

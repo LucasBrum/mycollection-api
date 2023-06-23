@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.mapper;
 
-import com.brum.mycollection.api.domain.user.User;
+import com.brum.mycollection.api.entity.User;
 import com.brum.mycollection.api.model.request.UserRequest;
 import com.brum.mycollection.api.model.response.UserResponse;
 import org.springframework.stereotype.Component;

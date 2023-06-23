@@ -1,14 +1,15 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.Messages;
+import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.CategoryException;
 import com.brum.mycollection.api.mapper.CategoryMapper;
 import com.brum.mycollection.api.model.request.CategoryRequest;
 import com.brum.mycollection.api.model.response.CategoryResponse;
 import com.brum.mycollection.api.repository.CategoryRepository;
 import com.brum.mycollection.api.service.CategoryService;
+import com.brum.mycollection.api.validations.Validator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +19,33 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
+
     private final CategoryRepository categoryRepository;
 
-    public CategoryServiceImpl(CategoryRepository categoryRepository) {
+    private List<Validator<CategoryRequest>> validators;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, List<Validator<CategoryRequest>> validators) {
         this.categoryRepository = categoryRepository;
+        this.validators = validators;
     }
 
     @Override
     public CategoryResponse create(CategoryRequest categoryRequest) {
-        log.info("Criando Categoria {}.", categoryRequest.name());
+        log.info(Messages.CREATING_CATEGORY, categoryRequest.name());
 
-        validateCategoryName(categoryRequest);
-        verifyIfCategoryNameExists(categoryRequest);
+        validators.forEach(v -> v.validate(categoryRequest));
 
         Category category = CategoryMapper.toEntity(categoryRequest);
 
         this.categoryRepository.save(category);
-        log.info("Categoria {} salva com sucesso!", category.getName());
+        log.info(Messages.CATEGORY_SUCCESSFULLY_SAVED, category.getName());
         CategoryResponse categoryResponse = CategoryMapper.toResponse(category);
         return categoryResponse;
     }
 
     @Override
     public CategoryResponse update(Long id, CategoryRequest categoryRequest) {
-        log.info("Atualizando Categoria {}.", categoryRequest.name());
+        log.info(Messages.UPDATING_CATEGORY, categoryRequest.name());
 
         this.findById(id);
         Category category = CategoryMapper.toEntity(categoryRequest);
@@ -49,28 +53,28 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository.save(category);
 
         CategoryResponse categoryResponse = CategoryMapper.toResponse(category);
-        log.info("Categoria atualizada com sucesso!");
+        log.info(Messages.CATEGORY_SUCCESSFULLY_UPDATED, category.getName());
         return categoryResponse;
     }
 
     @Override
     public CategoryResponse findById(Long id) {
-        log.info("Buscando categoria...");
+        log.info(Messages.SEARCHING_CATEGORY);
         Optional<Category> category = this.categoryRepository.findById(id);
 
         if (category.isEmpty()) {
-            throw new CategoryException("Categoria não encontrada.", HttpStatus.NOT_FOUND);
+            throw new CategoryException("Category not found.", HttpStatus.NOT_FOUND);
         }
 
         CategoryResponse categoryResponse = CategoryMapper.toResponse(category.get());
 
-        log.info("Categoria {} encontrada.", category.get().getName());
+        log.info(Messages.CATEGORY_FOUND, category.get().getName());
         return categoryResponse;
     }
 
     @Override
     public List<CategoryResponse> list() {
-        log.info("Listando categorias...");
+        log.info(Messages.LISTING_CATEGORIES);
         List<Category> categories = this.categoryRepository.findAllByOrderByNameAsc();
         return CategoryMapper.toResponseList(categories);
 
@@ -80,23 +84,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Long id) {
         CategoryResponse categoriaResponse = this.findById(id);
 
-        log.info("Deletando categoria {} ...", categoriaResponse.name());
+        log.info(Messages.DELETING_CATEGORY, categoriaResponse.name());
         this.categoryRepository.deleteById(id);
-        log.info("Categoria {} deletada com sucesso!", categoriaResponse.name());
+        log.info(Messages.CATEGORY_DELETING_SUCCESSFULLY, categoriaResponse.name());
     }
 
-    private void verifyIfCategoryNameExists(CategoryRequest categoryRequest) {
-            log.info("Validation if Category {} already exists.", categoryRequest.name());
-        boolean categoryExistsByName = categoryRepository.existsCategoryByName(categoryRequest.name());
-        if (categoryExistsByName) {
-            throw new CategoryException("Category already exists.", HttpStatus.CONFLICT);
-        }
-        log.info("A categoria {} foi validada.", categoryRequest.name());
-    }
-
-    private void validateCategoryName(CategoryRequest categoryRequest) {
-        if (categoryRequest.name() == null || categoryRequest.name().equals("")) {
-            throw new CategoryException("O nome da categoria deve ser preenchida.", HttpStatus.BAD_REQUEST);
-        }
-    }
 }

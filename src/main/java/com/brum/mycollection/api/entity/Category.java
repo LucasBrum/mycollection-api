@@ -1,4 +1,4 @@
-package com.brum.mycollection.api.domain.user;
+package com.brum.mycollection.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,8 +19,10 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
-public class User implements Serializable {
+@Table(name = "categories")
+public class Category implements Serializable {
+
+    private static final long serialVersionUID = -5115709874529054925L;
 
     @Id
     @JsonInclude(Include.NON_NULL)
@@ -30,13 +31,6 @@ public class User implements Serializable {
     private Long id;
 
     @JsonInclude(Include.NON_EMPTY)
-    @Column(unique = true)
-    private String username;
+    private String name;
 
-    @JsonInclude(Include.NON_EMPTY)
-    @Column(unique = true)
-    private String email;
-
-    @JsonInclude(Include.NON_EMPTY)
-    private String password;
 }

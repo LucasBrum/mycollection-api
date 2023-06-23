@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.mapper;
 
-import com.brum.mycollection.api.domain.item.Item;
+import com.brum.mycollection.api.entity.Item;
 import com.brum.mycollection.api.model.request.ItemRequest;
 import com.brum.mycollection.api.model.response.ItemResponse;
 import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;

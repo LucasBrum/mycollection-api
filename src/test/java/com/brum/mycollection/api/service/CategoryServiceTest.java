@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.service;
 
-import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.entity.Category;
 import com.brum.mycollection.api.exception.CategoryException;
 import com.brum.mycollection.api.mapper.CategoryMapper;
 import com.brum.mycollection.api.model.request.CategoryRequest;

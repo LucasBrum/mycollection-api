@@ -1,4 +1,4 @@
-package com.brum.mycollection.api.domain.artist;
+package com.brum.mycollection.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

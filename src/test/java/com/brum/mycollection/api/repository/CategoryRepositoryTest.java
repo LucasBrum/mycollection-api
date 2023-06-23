@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.repository;
 
-import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.entity.Category;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

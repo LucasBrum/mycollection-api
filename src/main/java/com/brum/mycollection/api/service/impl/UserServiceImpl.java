@@ -1,8 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.domain.user.User;
+import com.brum.mycollection.api.entity.User;
 import com.brum.mycollection.api.exception.UserException;
-import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.mapper.UserMapper;
 import com.brum.mycollection.api.model.request.UserRequest;
 import com.brum.mycollection.api.model.response.UserResponse;

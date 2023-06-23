@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.model.response;
 
-import com.brum.mycollection.api.domain.artist.Artist;
-import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.entity.Category;
 
 public record ItemResponse (
     Long id,

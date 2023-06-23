@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.domain.artist.Artist;
-import com.brum.mycollection.api.domain.artist.validations.ArtistValidator;
+import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ArtistMapper;
 import com.brum.mycollection.api.model.request.ArtistRequest;
@@ -24,10 +24,10 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
 
-    private final List<ArtistValidator> validators;
+    private final List<Validator<ArtistRequest>> validators;
 
     @Autowired
-    public ArtistServiceImpl(ArtistRepository artistRepository, List<ArtistValidator> validators) {
+    public ArtistServiceImpl(ArtistRepository artistRepository, List<Validator<ArtistRequest>> validators) {
         this.artistRepository = artistRepository;
         this.validators = validators;
     }

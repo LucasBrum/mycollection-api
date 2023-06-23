@@ -1,6 +1,5 @@
-package com.brum.mycollection.api.domain;
+package com.brum.mycollection.api.entity;
 
-import com.brum.mycollection.api.domain.category.Category;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

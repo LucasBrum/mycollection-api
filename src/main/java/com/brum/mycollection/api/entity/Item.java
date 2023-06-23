@@ -1,7 +1,7 @@
-package com.brum.mycollection.api.domain.item;
+package com.brum.mycollection.api.entity;
 
-import com.brum.mycollection.api.domain.artist.Artist;
-import com.brum.mycollection.api.domain.category.Category;
+import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.entity.Category;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

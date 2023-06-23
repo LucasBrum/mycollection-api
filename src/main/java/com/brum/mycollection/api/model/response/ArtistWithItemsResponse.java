@@ -1,6 +1,6 @@
 package com.brum.mycollection.api.model.response;
 
-import com.brum.mycollection.api.domain.item.Item;
+import com.brum.mycollection.api.entity.Item;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;

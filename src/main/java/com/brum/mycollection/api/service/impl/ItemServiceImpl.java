@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.domain.item.Item;
-import com.brum.mycollection.api.domain.item.validations.ItemValidator;
+import com.brum.mycollection.api.entity.Item;
+import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.model.request.ItemRequest;
@@ -26,10 +26,10 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
 
-    private final List<ItemValidator> validators;
+    private final List<Validator<ItemRequest>> validators;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository, List<ItemValidator> validators) {
+    public ItemServiceImpl(ItemRepository itemRepository, List<Validator<ItemRequest>> validators) {
         this.itemRepository = itemRepository;
         this.validators = validators;
     }
