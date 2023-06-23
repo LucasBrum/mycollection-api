@@ -1,6 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.entity.Item;
+import com.brum.mycollection.api.util.Messages;
 import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ItemMapper;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Service
 public class ItemServiceImpl implements ItemService {
 
+
     private final ItemRepository itemRepository;
 
     private final List<Validator<ItemRequest>> validators;
@@ -36,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemResponse create(ItemRequest itemRequest, MultipartFile file) throws IOException {
+        log.info(Messages.CREATING_A_NEW_ITEM, itemRequest.title());
         validators.forEach(v -> v.validate(itemRequest));
         try {
             Item item = ItemMapper.toEntity(itemRequest);
@@ -43,7 +46,7 @@ public class ItemServiceImpl implements ItemService {
 
             this.itemRepository.save(item);
 
-            log.info("Item {} created successfully", item.getTitle());
+            log.info(Messages.ITEM_CREATED_SUCCESSFULLY, item.getTitle());
 
             ItemResponse itemResponse = ItemMapper.toResponse(item);
 
@@ -55,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public byte[] findCoverImageById(Long id) {
-        log.info("Searching image by id {}.", id);
+        log.info(Messages.SEARCHING_IMAGE_BY_ID, id);
 
         try {
             Optional<Item> item = this.itemRepository.findById(id);
@@ -64,7 +67,7 @@ public class ItemServiceImpl implements ItemService {
             }
 
             byte[] coverImage = item.get().getCoverImage();
-            log.info("Cover Image for Item {} was found.", item.get().getTitle());
+            log.info(Messages.COVER_IMAGE_FOR_ITEM_WAS_FOUND, item.get().getTitle());
             return coverImage;
 
         } catch (ArtistException aex) {
@@ -76,23 +79,23 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemResponse> listAll() {
-        log.info("Listing all Items.");
+        log.info(Messages.LISTING_ALL_ITEMS);
         try {
             List<Item> itemList = this.itemRepository.findAll();
             return ItemMapper.toResponseList(itemList);
         } catch (Exception e) {
-            throw new ArtistException("Internal Error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public List<ItemWithCoverImageResponse> listAllWithCoverImage() {
-        log.info("Listing all items with cover images.");
+        log.info(Messages.LISTING_ALL_ITEMS_WITH_COVER_IMAGES);
         try {
             List<Item> itemList = this.itemRepository.findAll();
             return ItemMapper.toResponseListWithCoverImage(itemList);
         } catch (Exception e) {
-            throw new ArtistException("Internal Error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.entity.Artist;
+import com.brum.mycollection.api.util.Messages;
 import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ArtistMapper;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @Service
 public class ArtistServiceImpl implements ArtistService {
 
+
     private final ArtistRepository artistRepository;
 
     private final List<Validator<ArtistRequest>> validators;
@@ -34,7 +36,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public ArtistResponse create(ArtistRequest artistRequest) {
-		log.info("Creating Artist");
+		log.info(Messages.CREATING_ARTIST);
         validators.forEach(v -> v.validate(artistRequest));
         try {
             Artist artist = ArtistMapper.toEntity(artistRequest);
@@ -44,29 +46,29 @@ public class ArtistServiceImpl implements ArtistService {
 
             return artistResponse;
         } catch (Exception e) {
-            throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public ArtistResponse update(Long id, ArtistRequest artistRequest) {
-		log.info("Updating Artist");
+		log.info(Messages.UPDATING_ARTIST);
         Artist artist = ArtistMapper.toEntity(artistRequest);
         this.findById(id);
         try {
             artist.setId(id);
             this.artistRepository.save(artist);
             ArtistResponse artistResponse = ArtistMapper.toResponse(artist);
-			log.info("Artist updated with success.");
+			log.info(Messages.ARTIST_SUCCESSFULLY_UPDATED);
             return artistResponse;
         } catch (Exception e) {
-            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public ArtistResponse findById(Long id) {
-		log.info("Searching Artist by Id {}.", id);
+		log.info(Messages.SEARCHING_ARTIST_BY_ID, id);
         try {
             Optional<Artist> artist = this.artistRepository.findById(id);
             if (artist.isEmpty()) {
@@ -75,35 +77,35 @@ public class ArtistServiceImpl implements ArtistService {
             ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
             return artistResponse;
         } catch (Exception e) {
-            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public List<ArtistResponse> listAll() {
-        log.info("Listing All Artists.");
+        log.info(Messages.LISTING_ALL_ARTISTS);
         try {
             List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
             return ArtistMapper.toResponseList(artists);
         } catch (Exception e) {
-            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public List<ArtistResponse> listAllWithItems() {
-        log.info("Listing all Items.");
+        log.info(Messages.LISTING_ALL_ITEMS);
         try {
             List<Artist> artists = this.artistRepository.findAllByOrderByNameAsc();
             return ArtistMapper.toResponseList(artists);
         } catch (Exception e) {
-            throw new ArtistException("Internal error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @Override
     public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
-        log.info("Listing all items with details.");
+        log.info(Messages.LISTING_ALL_ITEMS_WITH_DETAILS);
         List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
             ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
             return artistDTO;
@@ -114,13 +116,13 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public void delete(Long id) {
-        log.info("Deleting Artist by Id {}", id);
+        log.info(Messages.DELETING_ARTIST_BY_ID, id);
         try {
             this.findById(id);
             this.artistRepository.deleteById(id);
-            log.info("Artist successfully deleted.");
+            log.info(Messages.ARTIST_SUCCESSFULLY_DELETED);
         } catch (ArtistException ce) {
-            throw new ArtistException("Internal server error.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
