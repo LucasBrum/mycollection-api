@@ -3,6 +3,7 @@ package com.brum.mycollection.api.validations.item;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.model.request.ItemRequest;
 import com.brum.mycollection.api.repository.ItemRepository;
+import com.brum.mycollection.api.util.Messages;
 import com.brum.mycollection.api.validations.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,11 @@ public class ValidateIfItemExistsByTitle implements Validator<ItemRequest> {
     }
 
     public void validate(ItemRequest itemRequest) {
-        log.info("Checking if the Item {} already exists.", itemRequest.title());
+        log.info(Messages.CHECKING_IF_THE_ITEM_ALREADY_EXISTS, itemRequest.title());
         Boolean isItemFounded = itemRepository.existsArtistByTitle(itemRequest.title());
 
         if (isItemFounded) {
-            throw new ArtistException("Item already registered.", HttpStatus.BAD_REQUEST);
+            throw new ArtistException(Messages.ITEM_ALREADY_REGISTERED, HttpStatus.BAD_REQUEST);
         }
     }
 }

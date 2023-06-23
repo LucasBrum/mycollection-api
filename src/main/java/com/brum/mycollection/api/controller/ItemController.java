@@ -5,6 +5,7 @@ import com.brum.mycollection.api.model.request.ItemRequest;
 import com.brum.mycollection.api.model.response.ItemResponse;
 import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import com.brum.mycollection.api.service.ItemService;
+import com.brum.mycollection.api.util.Constants;
 import com.brum.mycollection.api.util.ImageUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
+
 
     private final ItemService itemService;
 
@@ -42,7 +44,7 @@ public class ItemController {
     public ResponseEntity<byte[]> getCoverFromAlbum(@PathVariable Long id) {
         byte[] coverImage = this.itemService.findCoverImageById(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("image/png"));
+        headers.setContentType(MediaType.valueOf(Constants.IMAGE_PNG));
 
         return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
     }
