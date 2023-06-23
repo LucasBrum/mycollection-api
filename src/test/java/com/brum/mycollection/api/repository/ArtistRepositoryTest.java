@@ -32,7 +32,7 @@ public class ArtistRepositoryTest {
 
     @Test
     @DisplayName("Test Find All Artists sorted by Name")
-    void findAllByOrderByNameAsc() {
+    public void findAllByOrderByNameAsc() {
 
         createArtist("Mortification", "Australia");
         createArtist("Angra", "Brazil");
@@ -47,7 +47,7 @@ public class ArtistRepositoryTest {
 
     @Test
     @DisplayName("Test if artist exist by name")
-    void existsArtistByNameIsTrue() {
+    public void existsArtistByNameIsTrue() {
         createArtist("Mortification", "Australia");
 
         Boolean existsArtist = artistRepository.existsArtistByName("Mortification");
@@ -57,7 +57,7 @@ public class ArtistRepositoryTest {
 
     @Test
     @DisplayName("Test if artist exist by name return false")
-    void existsArtistByNameIsFalse() {
+    public void existsArtistByNameIsFalse() {
         createArtist(MORTIFICATION, AUSTRALIA);
 
         Boolean existsArtist = artistRepository.existsArtistByName("Angra");
@@ -67,7 +67,7 @@ public class ArtistRepositoryTest {
 
     @Test
     @DisplayName("Test Get Items details from Artist")
-    void getArtistsItemsDetails() {
+    public void getArtistsItemsDetails() {
         Artist artist = createArtist(MORTIFICATION, AUSTRALIA);
         Category category = createCategory(CD);
         createItem("Break the Curse", 1990, "Death Metal", category, null, artist);

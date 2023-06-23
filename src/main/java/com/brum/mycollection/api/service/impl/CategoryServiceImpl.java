@@ -20,7 +20,6 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
-    @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
@@ -87,10 +86,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void verifyIfCategoryNameExists(CategoryRequest categoryRequest) {
-        log.info("Validando se categoria {} existe.", categoryRequest.name());
+            log.info("Validation if Category {} already exists.", categoryRequest.name());
         boolean categoryExistsByName = categoryRepository.existsCategoryByName(categoryRequest.name());
         if (categoryExistsByName) {
-            throw new CategoryException("Categoria já existe.", HttpStatus.CONFLICT);
+            throw new CategoryException("Category already exists.", HttpStatus.CONFLICT);
         }
         log.info("A categoria {} foi validada.", categoryRequest.name());
     }
