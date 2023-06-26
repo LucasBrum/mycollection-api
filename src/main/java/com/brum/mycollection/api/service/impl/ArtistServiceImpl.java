@@ -125,4 +125,5 @@ public class ArtistServiceImpl implements ArtistService {
             throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

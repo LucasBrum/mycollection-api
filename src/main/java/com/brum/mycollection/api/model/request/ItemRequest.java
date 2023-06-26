@@ -26,9 +26,9 @@ public record ItemRequest (
 
         @JsonProperty("artist")
         @NotBlank(message = "Informe o Artista")
-        Artist artist,
+        Artist artist
 
-        @JsonProperty("coverImage")
-        byte[] coverImage
+//        @JsonProperty("coverImage")
+//        byte[] coverImage
 
 ) {}

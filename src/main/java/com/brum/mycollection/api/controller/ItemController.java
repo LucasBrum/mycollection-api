@@ -30,7 +30,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping
     public ResponseEntity<Response<ItemResponse>> create(@RequestPart("item") ItemRequest itemRequest, @RequestPart("coverImage") MultipartFile coverImageFile) throws IOException {
         ItemResponse itemResponse = this.itemService.create(itemRequest, coverImageFile);
         Response<ItemResponse> response = new Response<>();
