@@ -12,10 +12,13 @@ public interface ItemService {
 
     ItemResponse create(ItemRequest itemRequest, MultipartFile file) throws IOException;
 
+    ItemResponse findById(Long id);
+
     byte[] findCoverImageById(Long id);
 
     List<ItemResponse> listAll();
 
     List<ItemWithCoverImageResponse> listAllWithCoverImage();
 
+    void delete(Long id);
 }

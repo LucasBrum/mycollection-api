@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
@@ -44,8 +45,8 @@ public class CategoryControllerTest {
     private CategoryService categoryService;
 
     @Test
-    @DisplayName("Test try to create a category with a bad request Http Status 400")
     @WithMockUser
+    @DisplayName("Test try to create a category with a bad request Http Status 400")
     void createWithHttpStatus400Error() throws Exception {
         var response = mockMvc.perform(post("/categories")).andReturn().getResponse();
 
@@ -53,8 +54,8 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Test try to create a category with a request not found Http Status 404")
     @WithMockUser
+    @DisplayName("Test try to create a category with a request not found Http Status 404")
     void createWithHttpStatus404Error() throws Exception {
         var response = mockMvc.perform(post("/category")).andReturn().getResponse();
 
@@ -79,4 +80,12 @@ public class CategoryControllerTest {
         return categoryRequestJson.write(new CategoryRequest("CD"))
                 .getJson();
     }
+
+//    void testList() {
+//        var response = mockMvc.perform(
+//                get("/categories")
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                        .get
+//        )
+//    }
 }

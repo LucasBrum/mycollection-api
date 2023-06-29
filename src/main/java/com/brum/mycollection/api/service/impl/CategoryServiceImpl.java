@@ -10,6 +10,7 @@ import com.brum.mycollection.api.repository.CategoryRepository;
 import com.brum.mycollection.api.service.CategoryService;
 import com.brum.mycollection.api.validations.Validator;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -63,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = this.categoryRepository.findById(id);
 
         if (category.isEmpty()) {
-            throw new CategoryException("Category not found.", HttpStatus.NOT_FOUND);
+            throw new CategoryException(Messages.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         CategoryResponse categoryResponse = CategoryMapper.toResponse(category.get());

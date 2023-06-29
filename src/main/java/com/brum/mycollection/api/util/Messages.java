@@ -10,6 +10,7 @@ public final class Messages {
     public static final String CATEGORY_SUCCESSFULLY_UPDATED = "Category {} successfully updated.";
     public static final String SEARCHING_CATEGORY = "Searching Category...";
     public static final String CATEGORY_FOUND = "Category {} found.";
+    public static final String CATEGORY_NOT_FOUND = "Category {} not found.";
     public static final String LISTING_CATEGORIES = "Listing Categories...";
     public static final String DELETING_CATEGORY = "Deleting Category {} ...";
     public static final String CATEGORY_DELETING_SUCCESSFULLY = "Category {} deleting successfully.";
@@ -34,10 +35,13 @@ public final class Messages {
     public static final String CREATING_A_NEW_ITEM = "Creating a new Item {}.";
     public static final String ITEM_CREATED_SUCCESSFULLY = "Item {} created successfully";
     public static final String SEARCHING_IMAGE_BY_ID = "Searching image by id {}.";
+    public static final String ITEM_SUCCESSFULLY_DELETED = "Item successfully deleted.";
+    public static final String SEARCHING_ITEM_BY_ID = "Searching Item by id {}.";
     public static final String COVER_IMAGE_FOR_ITEM_WAS_FOUND = "Cover Image for Item {} was found.";
     public static final String LISTING_ALL_ITEMS_WITH_COVER_IMAGES = "Listing all items with cover images.";
     public static final String CHECKING_IF_THE_ITEM_ALREADY_EXISTS = "Checking if the Item {} already exists.";
     public static final String ITEM_ALREADY_REGISTERED = "Item already registered.";
+    public static final String DELETING_ITEM_BY_ID = "Deleting Item by Id {}";
 
     public static final String CREATING_A_NEW_USER = "Creating a new user {}.";
     public static final String UPDATING_USER = "Updating User.";

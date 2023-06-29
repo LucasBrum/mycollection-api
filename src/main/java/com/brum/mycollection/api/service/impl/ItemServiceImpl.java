@@ -1,6 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
 import com.brum.mycollection.api.entity.Item;
+import com.brum.mycollection.api.exception.ItemException;
 import com.brum.mycollection.api.util.Messages;
 import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
@@ -57,6 +58,17 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public ItemResponse findById(Long id) {
+        log.info(Messages.SEARCHING_ITEM_BY_ID, id);
+        Optional<Item> item = itemRepository.findById(id);
+        if (item.isEmpty()) {
+            return null;
+        }
+        ItemResponse itemResponse = ItemMapper.toResponse(item.get());
+        return itemResponse;
+    }
+
+    @Override
     public byte[] findCoverImageById(Long id) {
         log.info(Messages.SEARCHING_IMAGE_BY_ID, id);
 
@@ -97,6 +109,20 @@ public class ItemServiceImpl implements ItemService {
         } catch (Exception e) {
             throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void delete(Long id) {
+        log.info(Messages.DELETING_ITEM_BY_ID);
+
+       try {
+            this.findById(id);
+            this.itemRepository.deleteById(id);
+           log.info(Messages.ITEM_SUCCESSFULLY_DELETED);
+       } catch (ItemException iex) {
+           throw new ItemException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+       }
+
     }
 
 

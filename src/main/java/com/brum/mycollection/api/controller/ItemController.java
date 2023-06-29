@@ -71,4 +71,26 @@ public class ItemController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<ItemResponse>> findById(@PathVariable Long id) {
+        ItemResponse itemResponse = this.itemService.findById(id);
+
+        Response<ItemResponse> response = new Response<>();
+        response.setData(itemResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id)  {
+        this.itemService.delete(id);
+
+        Response<Boolean> response = new Response<>();
+        response.setData(Boolean.TRUE);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

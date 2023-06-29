@@ -107,7 +107,15 @@ public class ArtistServiceImpl implements ArtistService {
     public List<ArtistItemDetailsResponse> listArtistsItemsDetails() {
         log.info(Messages.LISTING_ALL_ITEMS_WITH_DETAILS);
         List<ArtistItemDetailsResponse> artists = this.artistRepository.getArtistsItemsDetails().stream().map(a -> {
-            ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(a.id(), a.name(), a.country(), a.title(), a.genre(), a.category(), a.releaseYear());
+            ArtistItemDetailsResponse artistDTO = new ArtistItemDetailsResponse(
+                    a.id(),
+                    a.name(),
+                    a.country(),
+                    a.title(),
+                    a.genre(),
+                    a.category(),
+                    a.releaseYear()
+            );
             return artistDTO;
         }).collect(Collectors.toList());
 
