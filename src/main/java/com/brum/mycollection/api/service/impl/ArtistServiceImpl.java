@@ -72,7 +72,7 @@ public class ArtistServiceImpl implements ArtistService {
         try {
             Optional<Artist> artist = this.artistRepository.findById(id);
             if (artist.isEmpty()) {
-                throw new ArtistException("Artist not found.", HttpStatus.NOT_FOUND);
+                throw new ArtistException(Messages.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
             }
             ArtistResponse artistResponse = ArtistMapper.toResponse(artist.get());
             return artistResponse;

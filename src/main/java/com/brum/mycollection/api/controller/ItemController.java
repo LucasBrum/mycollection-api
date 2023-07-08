@@ -1,7 +1,9 @@
 package com.brum.mycollection.api.controller;
 
 import com.brum.mycollection.api.model.Response;
+import com.brum.mycollection.api.model.request.ArtistRequest;
 import com.brum.mycollection.api.model.request.ItemRequest;
+import com.brum.mycollection.api.model.response.ArtistResponse;
 import com.brum.mycollection.api.model.response.ItemResponse;
 import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import com.brum.mycollection.api.service.ItemService;
@@ -60,12 +62,35 @@ public class ItemController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<ItemResponse>> findById(@PathVariable Long id) {
+        ItemResponse itemResponse = this.itemService.findById(id);
+
+        Response<ItemResponse> response = new Response<>();
+        response.setData(itemResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/cover-images")
     public ResponseEntity<Response<List<ItemWithCoverImageResponse>>> listAllWithCoverImage() {
         List<ItemWithCoverImageResponse> itemWithCoverImageResponses = this.itemService.listAllWithCoverImage();
 
         Response<List<ItemWithCoverImageResponse>> response = new Response<>();
         response.setData(itemWithCoverImageResponses);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Response<ItemResponse>> update(@PathVariable Long id, @RequestPart("item") ItemRequest itemRequest, @RequestPart("coverImage") MultipartFile coverImageFile)
+            throws IOException {
+        ItemResponse itemResponse = itemService.update(id, itemRequest, coverImageFile);
+
+        Response<ItemResponse> response = new Response<>();
+        response.setData(itemResponse);
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);

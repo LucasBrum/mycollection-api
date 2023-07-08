@@ -45,7 +45,6 @@ public class ItemMapper {
                 .releaseYear(itemRequest.releaseYear())
                 .category(itemRequest.category())
                 .artist(itemRequest.artist())
-//                .coverImage(itemRequest.coverImage())
                 .build();
 
         return item;
