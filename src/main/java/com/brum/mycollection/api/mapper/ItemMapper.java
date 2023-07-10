@@ -18,7 +18,8 @@ public class ItemMapper {
                 item.getReleaseYear(),
                 item.getGenre(),
                 item.getCategory(),
-                item.getArtist()
+                item.getArtist(),
+                item.getCoverImage()
 
         );
         return itemResponse;
