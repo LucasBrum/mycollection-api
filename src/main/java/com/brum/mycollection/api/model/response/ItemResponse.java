@@ -9,5 +9,6 @@ public record ItemResponse (
     Integer releaseYear,
     String genre,
     Category category,
-    Artist artist
+    Artist artist,
+	byte[] coverImageFile
 ) {}

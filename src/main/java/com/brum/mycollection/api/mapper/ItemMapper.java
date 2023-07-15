@@ -18,7 +18,8 @@ public class ItemMapper {
                 item.getReleaseYear(),
                 item.getGenre(),
                 item.getCategory(),
-                item.getArtist()
+                item.getArtist(),
+                item.getCoverImage()
 
         );
         return itemResponse;
@@ -45,7 +46,6 @@ public class ItemMapper {
                 .releaseYear(itemRequest.releaseYear())
                 .category(itemRequest.category())
                 .artist(itemRequest.artist())
-//                .coverImage(itemRequest.coverImage())
                 .build();
 
         return item;
