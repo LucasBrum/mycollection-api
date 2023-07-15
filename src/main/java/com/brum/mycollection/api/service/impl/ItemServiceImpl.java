@@ -136,12 +136,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void validateCoverImageFile(Long id, MultipartFile coverImageFile, Item item) throws IOException {
-        if (coverImageFile.getContentType() == null) {
+        if (coverImageFile == null) {
             byte[] coverImageFileFound =  this.findCoverImageById(id);
             item.setCoverImage(coverImageFileFound);
         }
 
-        if (coverImageFile.getContentType() != null) {
+        if (coverImageFile != null) {
             item.setCoverImage(ImageUtility.compressImage(coverImageFile.getBytes()));
         }
     }
