@@ -1,11 +1,6 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Artist;
 import com.brum.mycollection.api.entity.Item;
-import com.brum.mycollection.api.mapper.ArtistMapper;
-import com.brum.mycollection.api.model.response.ArtistResponse;
-import com.brum.mycollection.api.util.Messages;
-import com.brum.mycollection.api.validations.Validator;
 import com.brum.mycollection.api.exception.ArtistException;
 import com.brum.mycollection.api.mapper.ItemMapper;
 import com.brum.mycollection.api.model.request.ItemRequest;
@@ -14,6 +9,8 @@ import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import com.brum.mycollection.api.repository.ItemRepository;
 import com.brum.mycollection.api.service.ItemService;
 import com.brum.mycollection.api.util.ImageUtility;
+import com.brum.mycollection.api.util.Messages;
+import com.brum.mycollection.api.validations.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -133,6 +130,15 @@ public class ItemServiceImpl implements ItemService {
         } catch (Exception e) {
             throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public void delete(Long id) {
+        ItemResponse itemResponse = this.findById(id);
+
+        log.info(Messages.DELETING_ITEM_BY_ID, itemResponse.title());
+        this.itemRepository.deleteById(id);
+        log.info(Messages.ITEM_SUCCESSFULLY_DELETED, itemResponse.title());
     }
 
     private void validateCoverImageFile(Long id, MultipartFile coverImageFile, Item item) throws IOException {

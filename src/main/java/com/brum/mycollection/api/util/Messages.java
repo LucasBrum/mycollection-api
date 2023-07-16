@@ -37,12 +37,12 @@ public final class Messages {
     public static final String SEARCHING_ITEM_BY_ID = "Searching Item by Id {}.";
     public static final String ITEM_CREATED_SUCCESSFULLY = "Item {} created successfully";
     public static final String SEARCHING_IMAGE_BY_ID = "Searching image by id {}.";
-    public static final String ITEM_SUCCESSFULLY_DELETED = "Item successfully deleted.";
+    public static final String ITEM_SUCCESSFULLY_DELETED = "Item {} successfully deleted.";
     public static final String COVER_IMAGE_FOR_ITEM_WAS_FOUND = "Cover Image for Item {} was found.";
     public static final String LISTING_ALL_ITEMS_WITH_COVER_IMAGES = "Listing all items with cover images.";
     public static final String CHECKING_IF_THE_ITEM_ALREADY_EXISTS = "Checking if the Item {} already exists.";
     public static final String ITEM_ALREADY_REGISTERED = "Item already registered.";
-    public static final String DELETING_ITEM_BY_ID = "Deleting Item by Id {}";
+    public static final String DELETING_ITEM_BY_ID = "Deleting Item {}";
     public static final String LISTING_ALL_ITEMS = "Listing all Items.";
     public static final String LISTING_ALL_ITEMS_WITH_DETAILS = "Listing all items with details.";
     public static final String ITEM_NOT_FOUND = "iTEN Not found.";

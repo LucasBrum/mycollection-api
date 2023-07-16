@@ -15,6 +15,8 @@ public interface ItemService {
     ItemResponse update(Long id, ItemRequest itemRequest, MultipartFile coverImageFile) throws IOException;
     ItemResponse findById(Long id);
 
+    void delete(Long id);
+
     byte[] findCoverImageById(Long id);
 
     List<ItemResponse> listAll();

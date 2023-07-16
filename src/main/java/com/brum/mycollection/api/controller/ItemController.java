@@ -32,7 +32,7 @@ public class ItemController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Response<ItemResponse>> create(@RequestPart("item") ItemRequest itemRequest, @RequestPart("coverImage") MultipartFile coverImageFile)
+	public ResponseEntity<Response<ItemResponse>> create(@RequestPart("item") ItemRequest itemRequest, @RequestPart(value = "coverImage", required = false) MultipartFile coverImageFile)
 			throws IOException {
 		ItemResponse itemResponse = this.itemService.create(itemRequest, coverImageFile);
 		Response<ItemResponse> response = new Response<>();
@@ -91,6 +91,17 @@ public class ItemController {
 
 		Response<ItemResponse> response = new Response<>();
 		response.setData(itemResponse);
+		response.setStatusCode(HttpStatus.OK.value());
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Response<Boolean>> delete(@PathVariable Long id) {
+		this.itemService.delete(id);
+
+		Response<Boolean> response = new Response<>();
+		response.setData(Boolean.TRUE);
 		response.setStatusCode(HttpStatus.OK.value());
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
