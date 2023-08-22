@@ -20,6 +20,7 @@
 		<java.version>11</java.version>
 		<docker.image.prefix>my-collection-api</docker.image.prefix>
 		<org.easymock.version>4.3</org.easymock.version>
+		<docker.image.prefix>mycollection</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -149,8 +150,15 @@
                     <target>16</target>
                 </configuration>
             </plugin>
-
-
+			<!-- Configuration to docker image -->
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
+				<configuration>
+					<repository>${docker.image.prefix}/${project.artifactId}</repository>
+				</configuration>
+			</plugin>
         </plugins>
 	</build>
 
