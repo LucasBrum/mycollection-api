@@ -106,4 +106,12 @@ INSERT INTO public.artists (id,country,"name") VALUES
 	 (119,'Italy','Genius - A Rock Opera'),
 	 (120,'United States','Shadow Gallery'),
 	 (121,'Brazil','Stauros'),
-	 (122,'Brazil','Kiko Loureiro');
+	 (122,'Brazil','Kiko Loureiro'),
+	 (123,'United States','Counting Crows');
+INSERT INTO public.artists (id,country,"name") VALUES
+	 (124,'United States','Audioslave'),
+	 (125,'United States','Dio'),
+	 (126,'United States','Dominici'),
+	 (127,'Brazil','Monte Zion'),
+	 (128,'United States','Alice in Chains'),
+	 (129,'United States','Nofx');
