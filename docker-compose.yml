@@ -1,22 +1,24 @@
-version: "3.5"
+version: '3'
 
 services:
-  postgres:
-    image: postgres:latest
+  db-mycollection:
+    image: 'postgres:latest'
     ports:
       - "5433:5432"
+    container_name: db-mycollection
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mycollection_db
-  mycollection:
-    image: mycollection/my-collection-api
-    ports:
-      - "8080:8080"
-    environment:
-      POSTGRES_URL: jdbc:postgresql://postgres:5433/mycollection_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    depends_on:
-      - postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=mycollection_db
 
+  my-collection:
+    build: .
+    ports:
+      - "8081:8081"
+    container_name: api
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-mycollection:5432/mycollection_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    depends_on:
+      - db-mycollection

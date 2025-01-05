@@ -17,7 +17,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<docker.image.prefix>my-collection-api</docker.image.prefix>
 		<org.easymock.version>4.3</org.easymock.version>
 		<docker.image.prefix>mycollection</docker.image.prefix>
@@ -146,8 +146,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>16</source>
-                    <target>16</target>
+                    <source>17</source>
+                    <target>17</target>
                 </configuration>
             </plugin>
 			<!-- Configuration to docker image -->

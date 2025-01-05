@@ -1,16 +1,19 @@
-#
-# Build stage
-#
-FROM maven:3.6.3-openjdk-17 AS build
-COPY . .
-RUN mvn clean package
+# Usando uma imagem base do JDK
+FROM eclipse-temurin:17-jre-alpine
 
+# Define o diretório de trabalho
+WORKDIR /app
 
-#
-# Package stage
-#
-FROM openjdk:11-jdk-slim
-VOLUME /tmp
-ARG JAR_FILE=target/my-collection-api-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Copia o jar da sua aplicação para dentro do container
+COPY target/my-collection-api-0.0.1-SNAPSHOT.jar app.jar
+
+# Define as variáveis de ambiente
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://db-mycollection:5432/mycollection_db
+ENV SPRING_DATASOURCE_USERNAME=postgres
+ENV SPRING_DATASOURCE_PASSWORD=postgres
+
+# Expõe a porta da aplicação
+EXPOSE 8081
+
+# Comando para rodar a aplicação
+ENTRYPOINT ["java", "-jar", "app.jar"]

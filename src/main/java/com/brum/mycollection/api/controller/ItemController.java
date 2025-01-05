@@ -51,6 +51,8 @@ public class ItemController {
 		return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
 	}
 
+
+	//TODO: Listar os Itens pelo nome do Artista + Ano de lancamento
 	@GetMapping
 	public ResponseEntity<Response<List<ItemResponse>>> listAll() {
 		List<ItemResponse> itemResponseList = this.itemService.listAll();

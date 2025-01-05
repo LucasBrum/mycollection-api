@@ -13,6 +13,7 @@ import com.brum.mycollection.api.util.Messages;
 import com.brum.mycollection.api.validations.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,7 +100,7 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemResponse> listAll() {
         log.info(Messages.LISTING_ALL_ITEMS);
         try {
-            List<Item> itemList = this.itemRepository.findAll();
+            List<Item> itemList = this.itemRepository.findAll(Sort.by("artist.name").ascending().and(Sort.by("releaseYear").ascending()));
             return ItemMapper.toResponseList(itemList);
         } catch (Exception e) {
             throw new ArtistException(Messages.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
