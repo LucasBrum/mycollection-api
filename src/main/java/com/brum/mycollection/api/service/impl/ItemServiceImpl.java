@@ -8,13 +8,15 @@ import com.brum.mycollection.api.model.response.ItemResponse;
 import com.brum.mycollection.api.model.response.ItemWithCoverImageResponse;
 import com.brum.mycollection.api.repository.ItemRepository;
 import com.brum.mycollection.api.service.ItemService;
-import com.brum.mycollection.api.util.ImageUtility;
+import com.brum.mycollection.api.service.S3StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +24,15 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final S3StorageService s3StorageService;
+    
+    @Value("${file.base-url}")
+    private String fileBaseUrl;
 
     @Autowired
-    public ItemServiceImpl(ItemRepository itemRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, S3StorageService s3StorageService) {
         this.itemRepository = itemRepository;
+        this.s3StorageService = s3StorageService;
     }
 
     @Override
@@ -38,32 +45,20 @@ public class ItemServiceImpl implements ItemService {
 
         try {
             Item item = ItemMapper.toEntity(itemRequest);
-            item.setCoverImage(ImageUtility.compressImage(file.getBytes()));
+            
+            // Store the file and get the filename
+            String filename = s3StorageService.storeFile(file, "cvr-" + item.getTitle().toLowerCase().replace(" ", "-"));
+            
+            // Set the image path in S3
+            item.setCoverImagePath(filename);
+            
             this.itemRepository.save(item);
-            ItemResponse itemResponse = ItemMapper.toResponse(item);
-
-            return itemResponse;
+            return ItemMapper.toResponse(item);
         } catch (Exception e) {
             throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @Override
-    public byte[] findCoverImageById(Long id) {
-        try {
-            Optional<Item> item = this.itemRepository.findById(id);
-            if (item.isPresent()) {
-                byte[] coverImage = item.get().getCoverImage();
-                return coverImage;
-            }
-
-            throw new ArtistException("Item não encontrado.", HttpStatus.NOT_FOUND);
-        } catch (ArtistException aex) {
-            throw aex;
-        } catch (Exception e) {
-            throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
     @Override
     public List<ItemResponse> listAll() {
@@ -78,12 +73,39 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemWithCoverImageResponse> listAllWithCoverImage() {
         try {
-            List<Item> itemList = this.itemRepository.findAll();
-            return ItemMapper.toResponseListWithCoverImage(itemList);
+            List<Item> items = itemRepository.findAll();
+            return items.stream()
+                    .map(item -> new ItemWithCoverImageResponse(
+                            item.getId(),
+                            item.getTitle(),
+                            item.getReleaseYear(),
+                            item.getGenre(),
+                            item.getCoverImagePath()))
+                    .toList();
         } catch (Exception e) {
-            throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ArtistException("Erro interno", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-
+    @Override
+    public ItemWithCoverImageResponse findByCoverImagePath(String coverImagePath) {
+        try {
+            Item item = itemRepository.findByCoverImagePath(coverImagePath);
+            if (item == null) {
+                throw new ArtistException("Item não encontrado", HttpStatus.NOT_FOUND);
+            }
+            return new ItemWithCoverImageResponse(
+                item.getId(),
+                item.getTitle(),
+                item.getReleaseYear(),
+                item.getGenre(),
+                item.getCoverImagePath()
+            );
+        } catch (Exception e) {
+            if (e instanceof ArtistException) {
+                throw e;
+            }
+            throw new ArtistException("Erro interno ao buscar item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

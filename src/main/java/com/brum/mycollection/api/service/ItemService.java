@@ -12,10 +12,9 @@ public interface ItemService {
 
     ItemResponse create(ItemRequest itemRequest, MultipartFile file) throws IOException;
 
-    byte[] findCoverImageById(Long id);
-
     List<ItemResponse> listAll();
 
     List<ItemWithCoverImageResponse> listAllWithCoverImage();
 
+    ItemWithCoverImageResponse findByCoverImagePath(String coverImagePath);
 }

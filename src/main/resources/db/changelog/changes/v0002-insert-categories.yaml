@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: mycollection
+      changes:
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: CD
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: DVD
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: Blu-ray
+        - insert:
+            tableName: categories
+            columns:
+              - column:
+                  name: name
+                  value: Vinil 

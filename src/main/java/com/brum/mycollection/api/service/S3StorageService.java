@@ -1,0 +1,9 @@
+package com.brum.mycollection.api.service;
+
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Path;
+
+public interface S3StorageService {
+    String storeFile(MultipartFile file, String fileName);
+    String getFileUrl(String fileName);
+}

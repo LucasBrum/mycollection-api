@@ -37,15 +37,7 @@ public class ItemController {
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    @GetMapping("/cover/{id}")
-    public ResponseEntity<byte[]> getCoverFromAlbum(@PathVariable Long id) {
-        byte[] coverImage = this.itemService.findCoverImageById(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.valueOf("image/png"));
-
-        return new ResponseEntity<>(ImageUtility.decompressImage(coverImage), headers, HttpStatus.OK);
-    }
+    
 
     @GetMapping
     public ResponseEntity<Response<List<ItemResponse>>> listAll() {
@@ -69,4 +61,14 @@ public class ItemController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/by-image-path")
+    public ResponseEntity<Response<ItemWithCoverImageResponse>> getByImagePath(@RequestParam String imagePath) {
+        ItemWithCoverImageResponse itemResponse = this.itemService.findByCoverImagePath(imagePath);
+
+        Response<ItemWithCoverImageResponse> response = new Response<>();
+        response.setData(itemResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

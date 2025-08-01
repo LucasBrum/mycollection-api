@@ -36,7 +36,8 @@ public class Item implements Serializable {
     @ManyToOne
     private Category category;
 
-    private byte[] coverImage;
+    @Column(name = "cover_image_path")
+    private String coverImagePath;
 
     @ManyToOne
     @JoinColumn(name = "artistId", nullable = false)
