@@ -63,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemResponse> listAll() {
         try {
-            List<Item> itemList = this.itemRepository.findAll();
+            List<Item> itemList = this.itemRepository.findAllByOrderByArtistNameAscReleaseYearAsc();
             return ItemMapper.toResponseList(itemList);
         } catch (Exception e) {
             throw new ArtistException("Erro interno.", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -73,7 +73,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemWithCoverImageResponse> listAllWithCoverImage() {
         try {
-            List<Item> items = itemRepository.findAll();
+            List<Item> items = itemRepository.findAllByOrderByArtistNameAscReleaseYearAsc();
             return items.stream()
                     .map(item -> new ItemWithCoverImageResponse(
                             item.getId(),
