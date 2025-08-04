@@ -17,4 +17,10 @@ public interface ItemService {
     List<ItemWithCoverImageResponse> listAllWithCoverImage();
 
     ItemWithCoverImageResponse findByCoverImagePath(String coverImagePath);
+
+    ItemResponse findById(Long id);
+
+    ItemResponse update(Long id, ItemRequest itemRequest, MultipartFile file) throws IOException;
+
+    void delete(Long id);
 }

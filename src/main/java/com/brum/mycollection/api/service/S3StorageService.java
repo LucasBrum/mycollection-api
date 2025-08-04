@@ -6,4 +6,5 @@ import java.nio.file.Path;
 public interface S3StorageService {
     String storeFile(MultipartFile file, String fileName);
     String getFileUrl(String fileName);
+    void deleteFile(String fileName);
 }

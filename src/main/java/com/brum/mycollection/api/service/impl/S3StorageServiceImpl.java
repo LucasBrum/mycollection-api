@@ -1,7 +1,7 @@
 package com.brum.mycollection.api.service.impl;
 
-import com.brum.mycollection.api.entity.Item;
 import com.brum.mycollection.api.service.S3StorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,9 +10,8 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.UUID;
 
+@Slf4j
 @Service
 public class S3StorageServiceImpl implements S3StorageService {
     private final S3Client s3Client;
@@ -27,9 +26,9 @@ public class S3StorageServiceImpl implements S3StorageService {
     @Override
     public String storeFile(MultipartFile file, String fileName) {
         try {
-            System.out.println("Iniciando upload para S3...");
-            System.out.println("Nome do arquivo original: " + file.getOriginalFilename());
-            System.out.println("Nome do arquivo a ser usado: " + fileName);
+            log.info("Iniciando upload para S3...");
+            log.info("Nome do arquivo original: " + file.getOriginalFilename());
+            log.info("Nome do arquivo a ser usado: " + fileName);
             String fileExtension = getFileExtension(file.getOriginalFilename());
 
 
@@ -43,8 +42,8 @@ public class S3StorageServiceImpl implements S3StorageService {
 
             fileName = String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName);
 
-            System.out.println("Upload concluído com sucesso!");
-            System.out.println("URL do arquivo: " + String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName));
+            log.info("Upload concluído com sucesso!");
+            log.info("URL do arquivo: " + String.format("https://%s.s3.amazonaws.com/%s", bucketName, fileName));
             return fileName;
         } catch (IOException ex) {
             System.err.println("Erro de IO durante o upload: " + ex.getMessage());
@@ -66,5 +65,28 @@ public class S3StorageServiceImpl implements S3StorageService {
             return "";
         }
         return fileName.substring(fileName.lastIndexOf("."));
+    }
+
+    @Override
+    public void deleteFile(String fileName) {
+        try {
+            log.info("Iniciando exclusão do arquivo do S3...");
+            log.info("Nome do arquivo a ser excluído: " + fileName);
+
+            // Se a URL completa foi fornecida, extrair apenas o nome do arquivo
+            final String fileKey = fileName.startsWith("https://") 
+                ? fileName.substring(fileName.lastIndexOf("/") + 1)
+                : fileName;
+
+            s3Client.deleteObject(builder -> builder
+                .bucket(bucketName)
+                .key(fileKey)
+                .build());
+
+            log.info("Arquivo excluído com sucesso!");
+        } catch (Exception ex) {
+            System.err.println("Erro ao excluir arquivo do S3: " + ex.getMessage());
+            throw new RuntimeException("Could not delete file from S3. Error: " + ex.getMessage(), ex);
+        }
     }
 }

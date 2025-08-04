@@ -61,6 +61,32 @@ public class ItemController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Response<ItemResponse>> getById(@PathVariable Long id) {
+        ItemResponse itemResponse = this.itemService.findById(id);
+
+        Response<ItemResponse> response = new Response<>();
+        response.setData(itemResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/{id}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<Response<ItemResponse>> update(
+            @PathVariable Long id,
+            @RequestPart("item") ItemRequest itemRequest,
+            @RequestPart(value = "coverImageFile", required = false) MultipartFile coverImageFile) throws IOException {
+        
+        ItemResponse itemResponse = this.itemService.update(id, itemRequest, coverImageFile);
+        
+        Response<ItemResponse> response = new Response<>();
+        response.setData(itemResponse);
+        response.setStatusCode(HttpStatus.OK.value());
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/by-image-path")
     public ResponseEntity<Response<ItemWithCoverImageResponse>> getByImagePath(@RequestParam String imagePath) {
         ItemWithCoverImageResponse itemResponse = this.itemService.findByCoverImagePath(imagePath);
@@ -70,5 +96,15 @@ public class ItemController {
         response.setStatusCode(HttpStatus.OK.value());
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Response<Void>> delete(@PathVariable Long id) {
+        this.itemService.delete(id);
+
+        Response<Void> response = new Response<>();
+        response.setStatusCode(HttpStatus.NO_CONTENT.value());
+
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 }

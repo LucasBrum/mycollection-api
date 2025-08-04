@@ -1,5 +1,6 @@
 package com.brum.mycollection.api.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
+@Slf4j
 @Configuration
 public class S3Config {
 
@@ -22,9 +24,9 @@ public class S3Config {
 
     @Bean
     public S3Client s3Client() {
-        System.out.println("Configurando cliente S3...");
-        System.out.println("Bucket: " + bucketName);
-        System.out.println("Region: US_EAST_1");
+        log.info("Configurando cliente S3...");
+        log.info("Bucket: " + bucketName);
+        log.info("Region: US_EAST_1");
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
 
         return S3Client.builder()

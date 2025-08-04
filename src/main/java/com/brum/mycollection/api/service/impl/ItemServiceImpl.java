@@ -108,4 +108,78 @@ public class ItemServiceImpl implements ItemService {
             throw new ArtistException("Erro interno ao buscar item", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public ItemResponse findById(Long id) {
+        try {
+            Optional<Item> itemOptional = this.itemRepository.findById(id);
+            if (itemOptional.isPresent()) {
+                return ItemMapper.toResponse(itemOptional.get());
+            }
+            throw new ArtistException("Item não encontrado", HttpStatus.NOT_FOUND);
+        } catch (ArtistException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno ao buscar item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public ItemResponse update(Long id, ItemRequest itemRequest, MultipartFile file) throws IOException {
+        try {
+            Optional<Item> existingItemOptional = itemRepository.findById(id);
+            if (!existingItemOptional.isPresent()) {
+                throw new ArtistException("Item não encontrado", HttpStatus.NOT_FOUND);
+            }
+
+            Item existingItem = existingItemOptional.get();
+            Item updatedItem = ItemMapper.toEntity(itemRequest);
+            updatedItem.setId(id);
+
+            // Mantém a imagem antiga se não foi enviada uma nova
+            if (file != null) {
+                // Se houver uma imagem antiga, deleta do S3
+                if (existingItem.getCoverImagePath() != null) {
+                    s3StorageService.deleteFile(existingItem.getCoverImagePath());
+                }
+                
+                // Armazena a nova imagem
+                String filename = s3StorageService.storeFile(file, "cvr-" + updatedItem.getTitle().toLowerCase().replace(" ", "-"));
+                updatedItem.setCoverImagePath(filename);
+            } else {
+                updatedItem.setCoverImagePath(existingItem.getCoverImagePath());
+            }
+
+            updatedItem = itemRepository.save(updatedItem);
+            return ItemMapper.toResponse(updatedItem);
+            
+        } catch (ArtistException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno ao atualizar item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
+        try {
+            Optional<Item> itemOptional = itemRepository.findById(id);
+            if (!itemOptional.isPresent()) {
+                throw new ArtistException("Item não encontrado", HttpStatus.NOT_FOUND);
+            }
+
+            Item item = itemOptional.get();
+            
+            // Se houver uma imagem, deleta do S3
+            if (item.getCoverImagePath() != null) {
+                s3StorageService.deleteFile(item.getCoverImagePath());
+            }
+
+            itemRepository.delete(item);
+        } catch (ArtistException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ArtistException("Erro interno ao deletar item", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
