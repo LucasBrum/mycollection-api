@@ -65,10 +65,6 @@ databaseChangeLog:
               - column:
                   name: country
                   type: varchar(255)
-              - column:
-                  name: genre
-                  type: varchar(255)
-
         - createTable:
             tableName: items
             columns:
