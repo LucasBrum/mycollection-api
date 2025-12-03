@@ -1,0 +1,116 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: Lucas Brum
+      changes:
+        # Tabela de gravadoras/labels
+        - createTable:
+            tableName: labels
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discogs_id
+                  type: integer
+
+        # Tabela de faixas/tracks
+        - createTable:
+            tableName: tracks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_tracks_item
+                    references: items(id)
+                    deleteCascade: true
+              - column:
+                  name: position
+                  type: varchar(20)
+              - column:
+                  name: title
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: duration
+                  type: varchar(20)
+              - column:
+                  name: track_order
+                  type: integer
+                  constraints:
+                    nullable: false
+
+        # Tabela de créditos (músicos/produtores)
+        - createTable:
+            tableName: credits
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_credits_item
+                    references: items(id)
+                    deleteCascade: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(255)
+              - column:
+                  name: discogs_artist_id
+                  type: integer
+
+        # Adicionar novos campos na tabela items
+        - addColumn:
+            tableName: items
+            columns:
+              - column:
+                  name: label_id
+                  type: bigint
+              - column:
+                  name: discogs_release_id
+                  type: integer
+              - column:
+                  name: discogs_master_id
+                  type: integer
+              - column:
+                  name: discogs_image_url
+                  type: varchar(1000)
+
+        # Adicionar foreign key de items para labels
+        - addForeignKeyConstraint:
+            baseTableName: items
+            baseColumnNames: label_id
+            constraintName: fk_items_label
+            referencedTableName: labels
+            referencedColumnNames: id

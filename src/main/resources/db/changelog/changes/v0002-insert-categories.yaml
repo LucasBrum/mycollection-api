@@ -20,10 +20,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: name
-                  value: Blu-ray
+                  value: Blu-Ray
         - insert:
             tableName: categories
             columns:
               - column:
                   name: name
-                  value: Vinil 
+                  value: Vinyl

@@ -5,6 +5,7 @@ import com.brum.mycollection.api.entity.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 public record ItemRequest (
 
@@ -13,22 +14,50 @@ public record ItemRequest (
         String title,
 
         @JsonProperty("releaseYear")
-        @NotBlank(message = "Informe o ano de Lançamento")
         Integer releaseYear,
 
         @JsonProperty("genre")
-        @NotBlank(message = "Informe o Gênero")
         String genre,
 
         @JsonProperty("category")
-        @NotBlank(message = "Informe a Categoria")
         Category category,
 
         @JsonProperty("artist")
-        @NotBlank(message = "Informe o Artista")
         Artist artist,
 
+        @JsonProperty("artistName")
+        String artistName,
+
+        @JsonProperty("artistCountry")
+        String artistCountry,
+
         @JsonProperty("coverImage")
-        byte[] coverImage
+        byte[] coverImage,
+
+        // Novos campos para integração com Discogs
+
+        @JsonProperty("labelId")
+        Long labelId,
+
+        @JsonProperty("labelName")
+        String labelName,
+
+        @JsonProperty("discogsLabelId")
+        Integer discogsLabelId,
+
+        @JsonProperty("discogsReleaseId")
+        Integer discogsReleaseId,
+
+        @JsonProperty("discogsMasterId")
+        Integer discogsMasterId,
+
+        @JsonProperty("discogsImageUrl")
+        String discogsImageUrl,
+
+        @JsonProperty("tracks")
+        List<TrackRequest> tracks,
+
+        @JsonProperty("credits")
+        List<CreditRequest> credits
 
 ) {}

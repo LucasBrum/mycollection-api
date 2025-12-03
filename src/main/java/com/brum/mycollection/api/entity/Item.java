@@ -12,6 +12,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -43,4 +45,27 @@ public class Item implements Serializable {
     @JoinColumn(name = "artistId", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Artist artist;
+
+    // Novos campos para integração com Discogs
+    @ManyToOne
+    @JoinColumn(name = "label_id")
+    private Label label;
+
+    @Column(name = "discogs_release_id")
+    private Integer discogsReleaseId;
+
+    @Column(name = "discogs_master_id")
+    private Integer discogsMasterId;
+
+    @Column(name = "discogs_image_url")
+    private String discogsImageUrl;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Track> tracks = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Credit> credits = new ArrayList<>();
+
 }
